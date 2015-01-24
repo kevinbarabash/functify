@@ -58,6 +58,8 @@ function some(iterable, callback) {
 // funcit(iterable).filter(pred).take(5)
 // funcit.zip(evens, odds)
 
+// TODO: have static version of each method so they can be passed to things like "map" and then applied to an iterable
+// this is really only useful when you start having iterables of iterables
 class Functified {
     
     constructor(iterable) {
