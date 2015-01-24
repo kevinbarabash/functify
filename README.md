@@ -4,27 +4,27 @@ Add functional methods like map, reduce, filter, etc. iterables (ES6 Iterators).
 
 ## Usage
 
-let numbers = functify([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-
-console.log("odds:");
-for ( let odd in numbers.filter(n => n % 2) ) {
-    console.log(n);
-}
-
-console.log("evens:");
-for ( let even in numbers.filter(n => !(n % 2)) ) {
-    console.log(n);
-}
-
-console.log("pairs:");
-for ( let [odd, even] in numbers.split(n => n % 2, n => !(n % 2)).zip() ) {
-    console.log(`odd = ${odd}, even = ${even}`);
-}
-
-console.log("first 3 squares:");
-for ( let square in numbers.take(3).map(n => n * n) ) {
-    console.log(square);
-}
+    let numbers = functify([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    
+    console.log("odds:");
+    for ( let odd in numbers.filter(n => n % 2) ) {
+        console.log(n);
+    }
+    
+    console.log("evens:");
+    for ( let even in numbers.filter(n => !(n % 2)) ) {
+        console.log(n);
+    }
+    
+    console.log("pairs:");
+    for ( let [odd, even] in numbers.split(n => n % 2, n => !(n % 2)).zip() ) {
+        console.log(`odd = ${odd}, even = ${even}`);
+    }
+    
+    console.log("first 3 squares:");
+    for ( let square in numbers.take(3).map(n => n * n) ) {
+        console.log(square);
+    }
 
 ## Details
 
