@@ -1,11 +1,5 @@
-var start = performance.now();
+"use strict";
 
-var numbers = [1,2,3,4,5,6,7,8,9,10];
-
-console.log("unfiltered");
-for (let num of numbers) {
-    console.log(`num = ${num}`);
-}
 
 // TODO: think about a reverse iterator for array-like and map-like objects
 // a getter that returns an iterable
@@ -54,9 +48,6 @@ function some(iterable, callback) {
     return false;
 }
 
-// proposed syntax
-// funcit(iterable).filter(pred).take(5)
-// funcit.zip(evens, odds)
 
 // TODO: have static version of each method so they can be passed to things like "map" and then applied to an iterable
 // this is really only useful when you start having iterables of iterables
@@ -64,10 +55,11 @@ class Functified {
     
     constructor(iterable) {
         this.iterable = iterable;
+        this.isFunctified = true;
     }
     
     static fromGenerator(generator) {
-        return funcitify({
+        return functify({
             [Symbol.iterator]: generator
         });
     }
@@ -98,6 +90,9 @@ class Functified {
         });
     }
 
+    // TODO: create a pausable iterator or something that will produce one
+    // could be used to do work that needs to be repeatedly paused to keep the UI
+    // from freezing up, e.g. raytracer
     take(n) {
         var iterable = this.iterable;
         return Functified.fromGenerator(function* () {
@@ -150,17 +145,16 @@ class Functified {
     // TODO: every nth item... how useful it this?
     // for stuff like take 2 drop 2 repeat... create a custom function
     
-    // TODO: toString()
     
     // each predicate will produce its own Functified
     // where the predicate is a filter
     // return a Functified so we can chain from split
     split(...predicates) {
         if (predicates.length > 1) {
-            return funcitify(predicates.map(fn => this.filter(fn)));
+            return functify(predicates.map(fn => this.filter(fn)));
         }
         if (predicates[0] instanceof Map) {
-            return funcitify(funcitify(predicates[0]).map(([key,fn]) => {
+            return functify(functify(predicates[0]).map(([key,fn]) => {
                 return [key,this.filter(fn)];
             }));
         }
@@ -197,9 +191,22 @@ class Functified {
         });
     }
     
-    // assuming that this iterable will yield iterables
     flatten() {
-        
+        // assuming that this iterable will yield iterables
+        var iterables = this.iterable;
+        return Functified.fromGenerator(function* () {
+            var iterators = iterables.map(iterable => iterable[Symbol.iterator]());
+            while (true) {
+                for (let iterator of iterators) {
+                    var result = iterator.next();
+                    if (result.done) {
+                        return; // finished
+                    } else {
+                        yield result.value;
+                    }
+                }
+            }
+        });
     }
     
     static zip(...iterables) {
@@ -232,112 +239,16 @@ class Functified {
     some(callback) {
         return some(this.iterable, callback);
     }
+
+    toString() {
+        var i = 0;
+        var result = "[";
+        result += this.reduce((str, n) => str + (i++ > 0 ? `, ${n}` : `${n}`), "");
+        result += "]";
+        return result;
+    }
 }
 
-var funcitify = function(iterable) {
+var functify = function(iterable) {
     return new Functified(iterable);
 };
-
-
-console.log("reverse iterator");
-var revNums = funcitify(numbers[revIter]);
-for (let num of revNums.filter(n => n % 2)) {
-    console.log(num);
-}
-
-
-
-numbers = funcitify(numbers);
-
-console.log("\n");
-for (let num of numbers) {
-    console.log(num);
-}
-
-console.log("\n");
-for (let num of numbers) {
-    console.log(num);
-}
-
-console.log("\n");
-for (let num of numbers.filter(n => n % 2).skip(2).map(n => n * n).take(2).loop(10)) {
-    console.log(num);
-}
-
-var indices = [1, 2, 3, 5, 8];
-var fibIndices = function(iterable) {
-    return function* () {
-        var i = 0;
-        for (let value of iterable) {
-            if (indices.indexOf(i++) !== -1) {
-                yield value;
-            }
-        }
-    };  
-};
-
-console.log("\nFibIndicies");
-var td = numbers.custom(fibIndices);
-for (let num of td) {
-    console.log(num);
-}
-
-var evenPred = x => x % 2 === 0;
-var oddPred = x => x % 2;
-
-var [evens, odds] = numbers.split(evenPred, oddPred);
-
-console.log("evens");
-for (let num of evens) {
-    console.log(`even: ${num}`);
-}
-for (let num of odds) {
-    console.log(`odd: ${num}`);
-}
-
-var pairs = Functified.zip(evens, odds);
-for (let pair of pairs) {
-    console.log(pair);
-}
-
-console.log("pairs using .zip() method");
-pairs = numbers.split(oddPred, evenPred).zip();
-for (let pair of pairs) {
-    console.log(`pair = ${pair}`);
-}
-
-var map = new Map();
-map.set("even", evenPred);
-map.set("odd", oddPred);
-for (let [key,val] of numbers.split(map)) {
-    console.log(`key = ${key}`);
-    // TODO: callbacks need optional index parameters
-    var str = val.reduce((str, n) => str + `${n}, `, "");
-    console.log(`str = ${str}`);
-}
-
-var total = 0;
-for (let num of numbers) {
-    total += num;
-}
-
-console.log(`total = ${total}`);
-
-total = reduce(numbers, (accum, value) => accum + value, 0);
-console.log(`total (reduce version) = ${total}`);
-
-total = numbers.reduce((accum, value) => accum + value, 0);
-console.log(`total (Functified reduce version) = ${total}`);
-
-var elapsed = performance.now() - start;
-console.log(`elapsed time = ${elapsed}`);
-
-map = new Map();
-map.set("x", 5);
-map.set("y", 10);
-
-for (let entry of map) {
-    console.log(`entry = ${entry}`);
-}
-
-console.log(map.length);

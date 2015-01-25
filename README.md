@@ -14,6 +14,9 @@ this.  Avalue is only computed when the final iterator in chain is asked for the
 next value.  The intermediate values are passed through the chain but aren't 
 permenantly stored anywhere.
 
+This sounds an awful like transducers.  It is, the main difference is that 
+methods can be called in-line as opposed composing function _a priori_.
+
 ## Caveats
 
 This approach uses ES6 and specifically generators which aren't supported by 

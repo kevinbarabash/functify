@@ -1,5 +1,6 @@
 "use strict";
 
+
 var _slicedToArray = function (arr, i) {
   if (Array.isArray(arr)) {
     return arr;
@@ -20,16 +21,6 @@ var _prototypeProperties = function (child, staticProps, instanceProps) {
   if (staticProps) Object.defineProperties(child, staticProps);
   if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
-
-var start = performance.now();
-
-var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-console.log("unfiltered");
-for (var _iterator = numbers[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-  var num = _step.value;
-  console.log("num = " + num);
-}
 
 // TODO: think about a reverse iterator for array-like and map-like objects
 // a getter that returns an iterable
@@ -58,8 +49,8 @@ Object.defineProperty(Array.prototype, revIter, {
 
 function reduce(iterable, callback, initialValue) {
   var result = initialValue;
-  for (var _iterator2 = iterable[Symbol.iterator](), _step2; !(_step2 = _iterator2.next()).done;) {
-    var value = _step2.value;
+  for (var _iterator = iterable[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+    var value = _step.value;
     result = callback(result, value);
   }
 
@@ -67,8 +58,8 @@ function reduce(iterable, callback, initialValue) {
 }
 
 function every(iterable, callback) {
-  for (var _iterator3 = iterable[Symbol.iterator](), _step3; !(_step3 = _iterator3.next()).done;) {
-    var value = _step3.value;
+  for (var _iterator2 = iterable[Symbol.iterator](), _step2; !(_step2 = _iterator2.next()).done;) {
+    var value = _step2.value;
     if (!callback(value)) {
       return false;
     }
@@ -78,8 +69,8 @@ function every(iterable, callback) {
 }
 
 function some(iterable, callback) {
-  for (var _iterator4 = iterable[Symbol.iterator](), _step4; !(_step4 = _iterator4.next()).done;) {
-    var value = _step4.value;
+  for (var _iterator3 = iterable[Symbol.iterator](), _step3; !(_step3 = _iterator3.next()).done;) {
+    var value = _step3.value;
     if (callback(value)) {
       return true;
     }
@@ -88,27 +79,27 @@ function some(iterable, callback) {
   return false;
 }
 
-// proposed syntax
-// funcit(iterable).filter(pred).take(5)
-// funcit.zip(evens, odds)
 
+// TODO: have static version of each method so they can be passed to things like "map" and then applied to an iterable
+// this is really only useful when you start having iterables of iterables
 var Functified = (function () {
   function Functified(iterable) {
     this.iterable = iterable;
+    this.isFunctified = true;
   }
 
   Functified.fromGenerator = function (generator) {
-    return funcitify((function () {
-      var _funcitify = {};
+    return functify((function () {
+      var _functify = {};
 
-      _funcitify[Symbol.iterator] = generator;
-      return _funcitify;
+      _functify[Symbol.iterator] = generator;
+      return _functify;
     })());
   };
 
   Functified.prototype[Symbol.iterator] = function* () {
-    for (var _iterator5 = this.iterable[Symbol.iterator](), _step5; !(_step5 = _iterator5.next()).done;) {
-      var value = _step5.value;
+    for (var _iterator4 = this.iterable[Symbol.iterator](), _step4; !(_step4 = _iterator4.next()).done;) {
+      var value = _step4.value;
       yield value;
     }
   };
@@ -116,8 +107,8 @@ var Functified = (function () {
   Functified.prototype.filter = function (callback) {
     var iterable = this.iterable;
     return Functified.fromGenerator(function* () {
-      for (var _iterator6 = iterable[Symbol.iterator](), _step6; !(_step6 = _iterator6.next()).done;) {
-        var value = _step6.value;
+      for (var _iterator5 = iterable[Symbol.iterator](), _step5; !(_step5 = _iterator5.next()).done;) {
+        var value = _step5.value;
         if (callback(value)) {
           yield value;
         }
@@ -128,19 +119,22 @@ var Functified = (function () {
   Functified.prototype.map = function (callback) {
     var iterable = this.iterable;
     return Functified.fromGenerator(function* () {
-      for (var _iterator7 = iterable[Symbol.iterator](), _step7; !(_step7 = _iterator7.next()).done;) {
-        var value = _step7.value;
+      for (var _iterator6 = iterable[Symbol.iterator](), _step6; !(_step6 = _iterator6.next()).done;) {
+        var value = _step6.value;
         yield callback(value);
       }
     });
   };
 
+  // TODO: create a pausable iterator or something that will produce one
+  // could be used to do work that needs to be repeatedly paused to keep the UI
+  // from freezing up, e.g. raytracer
   Functified.prototype.take = function (n) {
     var iterable = this.iterable;
     return Functified.fromGenerator(function* () {
       var i = 0;
-      for (var _iterator8 = iterable[Symbol.iterator](), _step8; !(_step8 = _iterator8.next()).done;) {
-        var value = _step8.value;
+      for (var _iterator7 = iterable[Symbol.iterator](), _step7; !(_step7 = _iterator7.next()).done;) {
+        var value = _step7.value;
         if (i++ < n) {
           yield value;
         } else {
@@ -154,8 +148,8 @@ var Functified = (function () {
     var iterable = this.iterable;
     return Functified.fromGenerator(function* () {
       var i = 0;
-      for (var _iterator9 = iterable[Symbol.iterator](), _step9; !(_step9 = _iterator9.next()).done;) {
-        var value = _step9.value;
+      for (var _iterator8 = iterable[Symbol.iterator](), _step8; !(_step8 = _iterator8.next()).done;) {
+        var value = _step8.value;
         if (i < n) {
           i++;
         } else {
@@ -178,8 +172,8 @@ var Functified = (function () {
     return Functified.fromGenerator(function* () {
       var i = 0;
       while (i++ < n) {
-        for (var _iterator10 = iterable[Symbol.iterator](), _step10; !(_step10 = _iterator10.next()).done;) {
-          var value = _step10.value;
+        for (var _iterator9 = iterable[Symbol.iterator](), _step9; !(_step9 = _iterator9.next()).done;) {
+          var value = _step9.value;
           yield value;
         }
       }
@@ -191,7 +185,6 @@ var Functified = (function () {
   // TODO: every nth item... how useful it this?
   // for stuff like take 2 drop 2 repeat... create a custom function
 
-  // TODO: toString()
 
   // each predicate will produce its own Functified
   // where the predicate is a filter
@@ -205,12 +198,12 @@ var Functified = (function () {
     }
 
     if (predicates.length > 1) {
-      return funcitify(predicates.map(function (fn) {
+      return functify(predicates.map(function (fn) {
         return _this.filter(fn);
       }));
     }
     if (predicates[0] instanceof Map) {
-      return funcitify(funcitify(predicates[0]).map(function (_ref2) {
+      return functify(functify(predicates[0]).map(function (_ref2) {
         var _ref2 = _slicedToArray(_ref2, 2);
 
         var key = _ref2[0];
@@ -240,8 +233,8 @@ var Functified = (function () {
       });
       while (true) {
         var vector = [];
-        for (var _iterator11 = iterators[Symbol.iterator](), _step11; !(_step11 = _iterator11.next()).done;) {
-          var iterator = _step11.value;
+        for (var _iterator10 = iterators[Symbol.iterator](), _step10; !(_step10 = _iterator10.next()).done;) {
+          var iterator = _step10.value;
           var result = iterator.next();
           if (result.done) {
             return; // finished
@@ -255,8 +248,26 @@ var Functified = (function () {
     });
   };
 
-  // assuming that this iterable will yield iterables
-  Functified.prototype.flatten = function () {};
+  Functified.prototype.flatten = function () {
+    // assuming that this iterable will yield iterables
+    var iterables = this.iterable;
+    return Functified.fromGenerator(function* () {
+      var iterators = iterables.map(function (iterable) {
+        return iterable[Symbol.iterator]();
+      });
+      while (true) {
+        for (var _iterator11 = iterators[Symbol.iterator](), _step11; !(_step11 = _iterator11.next()).done;) {
+          var iterator = _step11.value;
+          var result = iterator.next();
+          if (result.done) {
+            return; // finished
+          } else {
+            yield result.value;
+          }
+        }
+      }
+    });
+  };
 
   Functified.zip = function () {
     var iterables = [];
@@ -299,157 +310,21 @@ var Functified = (function () {
     return some(this.iterable, callback);
   };
 
+  Functified.prototype.toString = function () {
+    var i = 0;
+    var result = "[";
+    result += this.reduce(function (str, n) {
+      return str + (i++ > 0 ? ", " + n : "" + n);
+    }, "");
+    result += "]";
+    return result;
+  };
+
   _prototypeProperties(Functified, {}, {});
 
   return Functified;
 })();
 
-var funcitify = function (iterable) {
+var functify = function (iterable) {
   return new Functified(iterable);
 };
-
-
-console.log("reverse iterator");
-var revNums = funcitify(numbers[revIter]);
-for (var _iterator13 = revNums.filter(function (n) {
-  return n % 2;
-})[Symbol.iterator](), _step13; !(_step13 = _iterator13.next()).done;) {
-  var num = _step13.value;
-  console.log(num);
-}
-
-
-
-
-
-numbers = funcitify(numbers);
-
-console.log("\n");
-for (var _iterator14 = numbers[Symbol.iterator](), _step14; !(_step14 = _iterator14.next()).done;) {
-  var num = _step14.value;
-  console.log(num);
-}
-
-console.log("\n");
-for (var _iterator15 = numbers[Symbol.iterator](), _step15; !(_step15 = _iterator15.next()).done;) {
-  var num = _step15.value;
-  console.log(num);
-}
-
-console.log("\n");
-for (var _iterator16 = numbers.filter(function (n) {
-  return n % 2;
-}).skip(2).map(function (n) {
-  return n * n;
-}).take(2).loop(10)[Symbol.iterator](), _step16; !(_step16 = _iterator16.next()).done;) {
-  var num = _step16.value;
-  console.log(num);
-}
-
-var indices = [1, 2, 3, 5, 8];
-var fibIndices = function (iterable) {
-  return function* () {
-    var i = 0;
-    for (var _iterator17 = iterable[Symbol.iterator](), _step17; !(_step17 = _iterator17.next()).done;) {
-      var value = _step17.value;
-      if (indices.indexOf(i++) !== -1) {
-        yield value;
-      }
-    }
-  };
-};
-
-console.log("\nFibIndicies");
-var td = numbers.custom(fibIndices);
-for (var _iterator18 = td[Symbol.iterator](), _step18; !(_step18 = _iterator18.next()).done;) {
-  var num = _step18.value;
-  console.log(num);
-}
-
-var evenPred = function (x) {
-  return x % 2 === 0;
-};
-var oddPred = function (x) {
-  return x % 2;
-};
-
-var _numbers$split = numbers.split(evenPred, oddPred);
-
-var _numbers$split2 = _slicedToArray(_numbers$split, 2);
-
-var evens = _numbers$split2[0];
-var odds = _numbers$split2[1];
-
-
-console.log("evens");
-for (var _iterator19 = evens[Symbol.iterator](), _step19; !(_step19 = _iterator19.next()).done;) {
-  var num = _step19.value;
-  console.log("even: " + num);
-}
-
-for (var _iterator20 = odds[Symbol.iterator](), _step20; !(_step20 = _iterator20.next()).done;) {
-  var num = _step20.value;
-  console.log("odd: " + num);
-}
-
-var pairs = Functified.zip(evens, odds);
-for (var _iterator21 = pairs[Symbol.iterator](), _step21; !(_step21 = _iterator21.next()).done;) {
-  var pair = _step21.value;
-  console.log(pair);
-}
-
-console.log("pairs using .zip() method");
-pairs = numbers.split(oddPred, evenPred).zip();
-for (var _iterator22 = pairs[Symbol.iterator](), _step22; !(_step22 = _iterator22.next()).done;) {
-  var pair = _step22.value;
-  console.log("pair = " + pair);
-}
-
-var map = new Map();
-map.set("even", evenPred);
-map.set("odd", oddPred);
-for (var _iterator23 = numbers.split(map)[Symbol.iterator](), _step23; !(_step23 = _iterator23.next()).done;) {
-  var _ref3 = _step23.value;
-  var _ref3 = _slicedToArray(_ref3, 2);
-
-  var key = _ref3[0];
-  var val = _ref3[1];
-  console.log("key = " + key);
-  // TODO: callbacks need optional index parameters
-  var str = val.reduce(function (str, n) {
-    return str + ("" + n + ", ");
-  }, "");
-  console.log("str = " + str);
-}
-
-var total = 0;
-for (var _iterator24 = numbers[Symbol.iterator](), _step24; !(_step24 = _iterator24.next()).done;) {
-  var num = _step24.value;
-  total += num;
-}
-
-console.log("total = " + total);
-
-total = reduce(numbers, function (accum, value) {
-  return accum + value;
-}, 0);
-console.log("total (reduce version) = " + total);
-
-total = numbers.reduce(function (accum, value) {
-  return accum + value;
-}, 0);
-console.log("total (Functified reduce version) = " + total);
-
-var elapsed = performance.now() - start;
-console.log("elapsed time = " + elapsed);
-
-map = new Map();
-map.set("x", 5);
-map.set("y", 10);
-
-for (var _iterator25 = map[Symbol.iterator](), _step25; !(_step25 = _iterator25.next()).done;) {
-  var entry = _step25.value;
-  console.log("entry = " + entry);
-}
-
-console.log(map.length);
