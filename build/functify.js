@@ -328,3 +328,27 @@ var Functified = (function () {
 var functify = function (iterable) {
   return new Functified(iterable);
 };
+
+var range = function (start, stop) {
+  var step = arguments[2] === undefined ? 1 : arguments[2];
+  if (arguments.length === 1) {
+    stop = start;
+    start = 0;
+  }
+  return Functified.fromGenerator(function* () {
+    var i = start;
+    if (step > 0) {
+      while (i < stop) {
+        yield i;
+        i += step;
+      }
+    } else if (step < 0) {
+      while (i > stop) {
+        yield i;
+        i += step;
+      }
+    } else {
+      throw "step should not equal 0";
+    }
+  });
+};

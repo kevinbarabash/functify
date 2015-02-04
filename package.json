@@ -1,0 +1,23 @@
+{
+  "name": "functify",
+  "version": "0.0.1",
+  "description": "Add functional methods like map, reduce, filter, etc. iterables (ES6 Iterators).",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --compilers js:6to5/register test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kevinb7/funcit/"
+  },
+  "author": "Kevin Barabash <kevinb7@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "assert": "^1.3.0",
+    "expect.js": "^0.3.1",
+    "mocha": "^2.1.0"
+  }
+}

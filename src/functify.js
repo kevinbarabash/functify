@@ -141,7 +141,6 @@ class Functified {
     }
     
     // TODO: dedupe, could take lots of storage
-    // TODO: split into separate tranducers (streams)
     // TODO: every nth item... how useful it this?
     // for stuff like take 2 drop 2 repeat... create a custom function
     
@@ -195,6 +194,8 @@ class Functified {
         // assuming that this iterable will yield iterables
         var iterables = this.iterable;
         return Functified.fromGenerator(function* () {
+            // TODO: make this more robust
+            // it should handle stuff like [1, [2, 3], [4, [5, 6, 7], [], 8, [], 9]
             var iterators = iterables.map(iterable => iterable[Symbol.iterator]());
             while (true) {
                 for (let iterator of iterators) {
@@ -229,6 +230,7 @@ class Functified {
     
     // reducing functions
     reduce(callback, initialValue) {
+        // TODO: if initialValue undefined, use the first value as the initialValue
         return reduce(this.iterable, callback, initialValue);
     }
 
@@ -252,3 +254,31 @@ class Functified {
 var functify = function(iterable) {
     return new Functified(iterable);
 };
+
+var range = function(start, stop, step = 1) {
+    if (arguments.length === 1) {
+        stop = start;
+        start = 0;
+    }
+    return Functified.fromGenerator(function* () {
+        let i = start;
+        if (step > 0) {
+            while (i < stop) {
+                yield i;
+                i += step;
+            }
+        } else if (step < 0) {
+            while (i > stop) {
+                yield i;
+                i += step;
+            }
+        } else {
+            throw "step should not equal 0"
+        }
+    });
+};
+
+export {
+    functify,
+    range
+}

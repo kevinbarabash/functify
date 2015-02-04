@@ -166,3 +166,7 @@ console.log(`list_of_lists = ${list_of_lists}`);
 
 var flat_list = list_of_lists.flatten();
 console.log(`flat_list = ${flat_list}`);
+
+console.log(`range(10) = ${range(10)}`);
+console.log(`range(0,10,4) = ${range(0,10,4)}`);
+console.log(`range(0,-5,-1) = ${range(0,-5,-1)}`);
