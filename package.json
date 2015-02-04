@@ -16,6 +16,7 @@
   "author": "Kevin Barabash <kevinb7@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "6to5": "^3.3.10",
     "assert": "^1.3.0",
     "expect.js": "^0.3.1",
     "mocha": "^2.1.0"
