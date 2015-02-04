@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/kevinb7/functify.svg)](https://travis-ci.org/kevinb7/functify)
+
 # functify
 
 Add functional methods like map, reduce, filter, etc. iterables (ES6 Iterators).
