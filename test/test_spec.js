@@ -1,5 +1,5 @@
-var assert = require("assert");
-var functify = require("../src/functify");
+import assert from "assert"
+import { functify } from "../src/functify"
 
 describe("functify", () => {
     var numbers, result;

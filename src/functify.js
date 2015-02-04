@@ -280,5 +280,6 @@ var range = function(start, stop, step = 1) {
 
 export {
     functify,
+    Functified,
     range
 }
