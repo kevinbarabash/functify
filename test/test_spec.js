@@ -1,5 +1,7 @@
 import assert from "assert"
-import { functify } from "../src/functify"
+import { Functified, functify, range } from "../src/functify"
+
+var F = Functified;
 
 describe("functify", () => {
     var numbers, result;
@@ -37,8 +39,8 @@ describe("functify", () => {
         assert.deepEqual(result, [1,9,25]);
     });
     
-    it("should split iterables", () => {
-        var [odds, evens] = numbers.split(x => x % 2, x => x % 2 === 0);
+    it("should group iterables using predicates", () => {
+        var [odds, evens] = numbers.groupBy(x => x % 2, x => x % 2 === 0);
         var evenResult = [];
         var oddResult = [];
         for (let num of evens) {
@@ -51,12 +53,12 @@ describe("functify", () => {
         assert.deepEqual(oddResult, [1,3,5]);
     });
     
-    it("should split using a Map of iterables", () => {
+    it("should groupByMap using a Map of predicates", () => {
         var map = new Map();
         map.set("odd", x => x % 2);
         map.set("even", x => x % 2 === 0);
         result = {};
-        for (let [key,val] of numbers.split(map)) {
+        for (let [key,val] of numbers.groupByMap(map)) {
             result[key] = [];
             for (let item of val) {
                 result[key].push(item);
@@ -69,7 +71,7 @@ describe("functify", () => {
     });
     
     it("should zip iterables", () => {
-        var pairs = numbers.split(x => x % 2, x => x % 2 === 0).zip();
+        var pairs = numbers.groupBy(x => x % 2, x => x % 2 === 0).zip();
         for (let pair of pairs) {
             result.push(pair);
         }
@@ -82,6 +84,11 @@ describe("functify", () => {
     
     it("should reduce to produce a sum", () => {
         var sum = numbers.reduce((accum, value) => accum + value, 0);
+        assert.equal(sum, 15);
+    });
+
+    it("should reduce to produce a sum without an initialValue", () => {
+        var sum = numbers.reduce((accum, value) => accum + value);
         assert.equal(sum, 15);
     });
     
@@ -126,5 +133,55 @@ describe("functify", () => {
             result.push(num);
         }
         assert.deepEqual(result, []);
+    });
+    
+    it("should flatten nested arrays", () => {
+        var nested = functify([1, [2, 3], [], [[4], 5], [[]]]);
+        for (let num of nested.flatten()) {
+            result.push(num);
+        }
+        assert.deepEqual(result, [1,2,3,4,5]);
+    });
+    
+    it("should remove duplicates", () => {
+        numbers = functify([1, 1, 2, 3, 5]);
+        for (let num of numbers.dedupe()) {
+            result.push(num);
+        }
+        assert.deepEqual(result, [1,2,3,5]);
+    });
+    
+    it("should loop", () => {
+        for (let num of numbers.loop(2)) {
+            result.push(num);
+        }
+        assert.deepEqual(result, [1,2,3,4,5,1,2,3,4,5]);
+    });
+
+    it("should stop an infinite loop with take", () => {
+        for (let num of numbers.loop().take(8)) {
+            result.push(num);
+        }
+        assert.deepEqual(result, [1,2,3,4,5,1,2,3]);
+    });
+    
+    it("should iterate object properties as entries", () => {
+        var entries = F.entries({ x:5, y:10 });
+        for (let [key,value] of entries) {
+            result.push([key, value]);
+        }
+        assert.deepEqual(result, [["x",5],["y",10]]);
+    });
+    
+    it("should return an array", () => {
+        result = numbers.toArray();
+        assert.deepEqual(result, [1, 2, 3, 4, 5]);
+    });
+    
+    it("should generate a range of numbers", () => {
+        for (let num of range(0,5)) {
+            result.push(num);
+        }
+        assert.deepEqual(result, [0,1,2,3,4]);
     });
 });
