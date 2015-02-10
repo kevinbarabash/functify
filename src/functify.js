@@ -19,6 +19,8 @@ class Functified {
         return Functified.fromGenerator(generator);
     }
 
+    // TODO: make this more like rxjs' distinct
+    // https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/distinct.md
     dedupe() {
         var iterable = this.iterable;
         var memory = new Set();
@@ -92,6 +94,7 @@ class Functified {
         });
     }
     
+    // TODO: skipWhile
     skip(n) {
         var iterable = this.iterable;
         return Functified.fromGenerator(function* () {
@@ -106,18 +109,48 @@ class Functified {
         });
     }
     
-    // TODO: create a pausable iterator or something that will produce one
-    // could be used to do work that needs to be repeatedly paused to keep the UI
-    // from freezing up, e.g. raytracer
+    // TODO: takeUntil
     take(n) {
-        var iterable = this.iterable;
+        // using an explicit iterator supports pausable iteratables
+        var iterator = this.iterable[Symbol.iterator]();
+        var self = this;
         return Functified.fromGenerator(function* () {
+            // TODO: investigate calling .take then .takeUntil (and vice versa)
+            if (self.hasOwnProperty("startValue") && self.isPausable) {
+                yield self.startValue;
+            }
             let i = 0;
-            for (let value of iterable) {
-                if (i++ < n) {
-                    yield value;
+            while (i < n) {
+                var result = iterator.next();
+                if (result.done) {
+                    break;
                 } else {
-                    return;
+                    yield result.value;
+                    i++;
+                }
+            }
+        });
+    }
+    
+    takeUntil(predicate) {
+        var iterator = this.iterable[Symbol.iterator]();
+        var self = this;
+        return Functified.fromGenerator(function* () {
+            if (self.hasOwnProperty("startValue") && self.isPausable) {
+                yield self.startValue;
+            }
+            while (true) {
+                var result = iterator.next();
+                if (result.done) {
+                    break;
+                } else {
+                    if (predicate(result.value)) {
+                        // save the value so we can yield if takeUntil is called again
+                        self.startValue = result.value;
+                        break;
+                    } else {
+                        yield result.value;
+                    }
                 }
             }
         });
@@ -212,6 +245,22 @@ class Functified {
             result.push(value);
         }
         return result;
+    }
+
+    toPausable() {
+        var iterator = this.iterable[Symbol.iterator]();
+        var functified = Functified.fromGenerator(function* () {
+            while (true) {
+                var result = iterator.next();
+                if (result.done) {
+                    break;
+                } else {
+                    yield result.value;
+                }
+            } 
+        });
+        functified.isPausable = true;
+        return functified;
     }
 
     toString() {
