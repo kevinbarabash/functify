@@ -135,6 +135,20 @@ describe("functify", () => {
         assert.deepEqual(result, []);
     });
     
+    it("should skipWhile predicate is true", () => {
+        for (let num of numbers.skipWhile(x => x < 3)) {
+            result.push(num);
+        }
+        assert.deepEqual(result, [3,4,5]);
+    });
+
+    it("should skip all if skipWhile predice is always true", () => {
+        for (let num of numbers.skipWhile(x => true)) {
+            result.push(num);
+        }
+        assert.deepEqual(result, []);
+    });
+    
     it("should flatten nested arrays", () => {
         var nested = functify([1, [2, 3], [], [[4], 5], [[]]]);
         for (let num of nested.flatten()) {
@@ -145,7 +159,7 @@ describe("functify", () => {
     
     it("should remove duplicates", () => {
         numbers = functify([1, 1, 2, 3, 5]);
-        for (let num of numbers.dedupe()) {
+        for (let num of numbers.distinct()) {
             result.push(num);
         }
         assert.deepEqual(result, [1,2,3,5]);
@@ -184,35 +198,12 @@ describe("functify", () => {
         }
         assert.deepEqual(result, [0,1,2,3,4]);
     });
-    
-    it("should create a pausable iteratble that works with take", () => {
-        var pausableNumbers = numbers.toPausable();
-        
-        for (let num of pausableNumbers.take(1)) {
+
+    it("should generate a range of numbers with a negative step", () => {
+        for (let num of range(5,0,-1)) {
             result.push(num);
         }
-        assert.deepEqual(result, [1]);
-        result = [];
-
-        for (let num of pausableNumbers.take(2)) {
-            result.push(num);
-        }
-        assert.deepEqual(result, [2,3]);
-    });
-
-    it("should create a pausable iteratble when chaining", () => {
-        var pausableSquares = numbers.map(x => x * x).toPausable();
-
-        for (let num of pausableSquares.take(1)) {
-            result.push(num);
-        }
-        assert.deepEqual(result, [1]);
-        result = [];
-
-        for (let num of pausableSquares.take(2)) {
-            result.push(num);
-        }
-        assert.deepEqual(result, [4,9]);
+        assert.deepEqual(result, [5,4,3,2,1]);
     });
     
     it("should always take the first n if not pausable", () => {
@@ -235,31 +226,145 @@ describe("functify", () => {
         assert.deepEqual(result, [1,2]);
     });
 
-    it("should always take until from the start if not pausable", () => {
-        for (let num of numbers.takeUntil(x => x > 2)) {
-            result.push(num);
-        }
-        assert.deepEqual(result, [1,2]);
+    describe("Pausables", () => {
+        it("should create a pausable iteratble that works with take", () => {
+            var pausableNumbers = numbers.toPausable();
+
+            for (let num of pausableNumbers.take(1)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [1]);
+            result = [];
+
+            for (let num of pausableNumbers.take(2)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [2,3]);
+        });
+
+        it("should create a pausable iteratble when chaining", () => {
+            var pausableSquares = numbers.map(x => x * x).toPausable();
+
+            for (let num of pausableSquares.take(1)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [1]);
+            result = [];
+
+            for (let num of pausableSquares.take(2)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [4,9]);
+        });
+
+        it("should allow chaining after the first take", () => {
+            var pausableNumbers = numbers.toPausable();
+
+            for (let num of pausableNumbers.take(1)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [1]);
+            result = [];
+
+            for (let num of pausableNumbers.map(x => x * x).take(2)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [4,9]);
+        });
         
-        result = [];
-        for (let num of numbers.takeUntil(x => x > 4)) {
-            result.push(num);
-        }
-        assert.deepEqual(result, [1,2,3,4]);
+        it("should always take until from the start if not pausable", () => {
+            for (let num of numbers.takeUntil(x => x > 2)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [1,2]);
+
+            result = [];
+            for (let num of numbers.takeUntil(x => x > 4)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [1,2,3,4]);
+        });
+
+        it("should take until from the last position if pausable", () => {
+            var pausableNumbers = numbers.toPausable();
+
+            for (let num of pausableNumbers.takeUntil(x => x > 2)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [1,2]);
+
+            result = [];
+            for (let num of pausableNumbers.takeUntil(x => x > 4)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [3,4]);
+        });
+        
+        it("should filter a pausable iterable", () => {
+            var pausableOdds = numbers.toPausable().filter(x => x % 2);
+
+            for (let num of pausableOdds.take(2)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [1,3]);
+
+            result = [];
+            for (let num of pausableOdds.take(2)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [5]);
+        });
+
+        it("should allow take and takeUntil on the same pausable", () => {
+            var pausableNumbers = numbers.toPausable();
+
+            for (let num of pausableNumbers.takeUntil(x => x > 2)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [1,2]);
+
+            result = [];
+            for (let num of pausableNumbers.take(2)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [3,4]);
+        });
     });
+    
+    describe("Sets", () => {
+        it("should work with sets", function () {
+            var colors = new Set();
 
-    it("should take until from the last position if pausable", () => {
-        var pausableNumbers = numbers.toPausable();
-        
-        for (let num of pausableNumbers.takeUntil(x => x > 2)) {
-            result.push(num);
-        }
-        assert.deepEqual(result, [1,2]);
+            colors.add("red");
+            colors.add("green");
+            colors.add("blue");
 
-        result = [];
-        for (let num of pausableNumbers.takeUntil(x => x > 4)) {
-            result.push(num);
-        }
-        assert.deepEqual(result, [3,4]);
+            for (let color of functify(colors)) {
+                result.push(color);
+            }
+
+            assert(result.indexOf("red") !== -1);
+            assert(result.indexOf("green") !== -1);
+            assert(result.indexOf("blue") !== -1);
+
+            assert.equal(result.length, 3);
+        });
+
+        it("should work with sets", function () {
+            var colors = new Set();
+
+            colors.add("red");
+            colors.add("green");
+            colors.add("blue");
+
+            for (let color of functify(colors).map(col => col.toUpperCase())) {
+                result.push(color);
+            }
+
+            assert(result.indexOf("RED") !== -1);
+            assert(result.indexOf("GREEN") !== -1);
+            assert(result.indexOf("BLUE") !== -1);
+            assert.equal(result.length, 3);
+        });
     });
 });

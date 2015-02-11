@@ -19,9 +19,8 @@ class Functified {
         return Functified.fromGenerator(generator);
     }
 
-    // TODO: make this more like rxjs' distinct
-    // https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/distinct.md
-    dedupe() {
+    // alias dedupe, unique
+    distinct() {
         var iterable = this.iterable;
         var memory = new Set();
         return Functified.fromGenerator(function* () {
@@ -94,7 +93,6 @@ class Functified {
         });
     }
     
-    // TODO: skipWhile
     skip(n) {
         var iterable = this.iterable;
         return Functified.fromGenerator(function* () {
@@ -109,17 +107,31 @@ class Functified {
         });
     }
     
-    // TODO: takeUntil
+    skipWhile(predicate) {
+        var iterable = this.iterable;
+        return Functified.fromGenerator(function* () {
+            var skip = true;
+            for (let value of iterable) {
+                if (!predicate(value)) {
+                    skip = false;
+                }
+                if (!skip) {
+                    yield value;
+                }
+            }
+        });
+    }
+    
     take(n) {
         // using an explicit iterator supports pausable iteratables
         var iterator = this.iterable[Symbol.iterator]();
         var self = this;
         return Functified.fromGenerator(function* () {
-            // TODO: investigate calling .take then .takeUntil (and vice versa)
+            let i = 0;
             if (self.hasOwnProperty("startValue") && self.isPausable) {
                 yield self.startValue;
+                i++;
             }
-            let i = 0;
             while (i < n) {
                 var result = iterator.next();
                 if (result.done) {

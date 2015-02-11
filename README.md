@@ -91,3 +91,44 @@ This allows methods to be easily implemented.  Here's the implementation for `ma
             }
         });
     }
+
+## Pausable
+
+Sometimes you may want to take some of the values from the iterator, do something
+with those values, and then resume taking values where you left of at some point
+in the future.  Normally you would have to resort to creating an iterator and 
+calling `next()` manually, e.g.
+
+    var numbers = [1,2,3,4,5];
+    var iterator = numbers[Symbol.iterator]();
+    
+    for (let i = 0; i < 2; i++) {
+        console.log(iterator.next().value);
+    }
+    
+    // do something else
+    
+    while (true) {
+        let result = iterator.next();
+        if (result.done) {
+            break;
+        }
+        let value = iterator.next().value;
+        let square = value * value;
+        console.log(value * value);
+    }
+    
+The `toPausable()` creates an iterator Below is an example of how this works.
+
+    var numbers = [1,2,3,4,5];
+    var pausableNumbers = numbers.toPausable();
+    
+    for (let n of pausableNumbers.take(2)) {
+        console.log(n);     // 1 2
+    }
+    
+    // do something else
+    
+    for (let n of pausableNumbers.map(x => x * x).takeUntil(x => x > 16)) {
+        console.log(n);     // 9 16
+    }
