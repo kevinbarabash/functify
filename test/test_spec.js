@@ -58,7 +58,7 @@ describe("functify", () => {
         map.set("odd", x => x % 2);
         map.set("even", x => x % 2 === 0);
         result = {};
-        for (let [key,val] of numbers.groupByMap(map)) {
+        for (let [key = "", val = 0] of numbers.groupByMap(map)) {
             result[key] = [];
             for (let item of val) {
                 result[key].push(item);
@@ -178,10 +178,26 @@ describe("functify", () => {
         }
         assert.deepEqual(result, [1,2,3,4,5,1,2,3]);
     });
+
+    it("should iterate object keys", () => {
+        var keys = F.keys({ x:5, y:10 });
+        for (let key of keys) {
+            result.push(key);
+        }
+        assert.deepEqual(result, ["x", "y"]);
+    });
+
+    it("should iterate object values", () => {
+        var values = F.values({ x:5, y:10 });
+        for (let value of values) {
+            result.push(value);
+        }
+        assert.deepEqual(result, [5, 10]);
+    });
     
     it("should iterate object properties as entries", () => {
         var entries = F.entries({ x:5, y:10 });
-        for (let [key,value] of entries) {
+        for (let [key = 0, value = 0] of entries) {
             result.push([key, value]);
         }
         assert.deepEqual(result, [["x",5],["y",10]]);

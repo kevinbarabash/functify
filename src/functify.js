@@ -179,6 +179,14 @@ class Functified {
         });
     }
 
+    static keys(obj) {
+        return functify(Object.keys(obj));
+    }
+
+    static values(obj) {
+        return functify(Object.keys(obj).map(key => obj[key]));
+    }
+
     static entries(obj) {
         return functify(Object.keys(obj)).map(key => [key, obj[key]]);
     }
