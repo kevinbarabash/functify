@@ -19,18 +19,15 @@ permenantly stored anywhere.
 This sounds an awful like transducers.  It is, the main difference is that 
 methods can be called in-line as opposed composing function _a priori_.
 
-## Caveats
+## Requires
 
 This approach uses ES6 and specifically generators which aren't supported by 
-many browsers yet.  The code is compiled down to ES5 using 6to5, but requires a
-polyfill (25 KB) which includes the regenerator runtime.
-
-The regenerator runtime can be removed if the code was written with plain old
-Iterators, but then the source wouldn't be as concise.  I plan to fix this 
-situation by creating a transform which converts the existing source to a 
-generator free version.
+many browsers yet.  For full browser support please use [babel](http://babeljs.io/)
+to transpile your project from ES6 to ES5 when using this library.
 
 ## Usage
+
+    let functify = require('functify');
 
     let numbers = functify([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     
