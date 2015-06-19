@@ -1,6 +1,6 @@
 {
   "name": "functify",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Add functional methods like map, reduce, filter, etc. iterables (ES6 Iterators).",
   "main": "index.js",
   "directories": {
