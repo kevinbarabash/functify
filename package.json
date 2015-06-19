@@ -2,7 +2,7 @@
   "name": "functify",
   "version": "0.1.0",
   "description": "Add functional methods like map, reduce, filter, etc. iterables (ES6 Iterators).",
-  "main": "index.js",
+  "main": "functify.js",
   "directories": {
     "test": "test"
   },
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kevinb7/funcit/"
+    "url": "https://github.com/kevinb7/functify"
   },
   "author": "Kevin Barabash <kevinb7@gmail.com>",
   "license": "MIT",

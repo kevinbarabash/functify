@@ -1,5 +1,5 @@
 import assert from "assert"
-import { Functified, functify, range } from "../src/functify"
+import { Functified, functify, range } from "../functify"
 
 var F = Functified;
 
