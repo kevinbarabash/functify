@@ -27,7 +27,7 @@ to transpile your project from ES6 to ES5 when using this library.
 
 ## Usage
 
-    let functify = require('functify');
+    let { functify } = require('functify');
 
     let numbers = functify([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     
