@@ -2,12 +2,13 @@
   "name": "functify",
   "version": "0.1.1",
   "description": "Add functional methods like map, reduce, filter, etc. iterables (ES6 Iterators).",
-  "main": "functify.js",
+  "main": "dist/functify.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register test"
+    "test": "mocha --compilers js:babel-core/register test",
+    "build": "babel src/functify.js -o dist/functify.js"
   },
   "repository": {
     "type": "git",
@@ -16,6 +17,7 @@
   "author": "Kevin Barabash <kevinb7@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "babel": "^5.5.8",
     "babel-core": "^5.5.8",
     "mocha": "^2.1.0"
   }
