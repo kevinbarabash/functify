@@ -1,7 +1,7 @@
 "use strict";
 
 class Functified {
-    
+
     constructor(iterable) {
         this.iterable = iterable;
         this.isFunctified = true;
@@ -43,7 +43,7 @@ class Functified {
             }
         });
     }
-    
+
     flatten() {
         var iterable = this.iterable;
         return Functified.fromGenerator(function* () {
@@ -92,7 +92,7 @@ class Functified {
             }
         });
     }
-    
+
     skip(n) {
         var iterable = this.iterable;
         return Functified.fromGenerator(function* () {
@@ -106,7 +106,7 @@ class Functified {
             }
         });
     }
-    
+
     skipWhile(predicate) {
         var iterable = this.iterable;
         return Functified.fromGenerator(function* () {
@@ -121,7 +121,7 @@ class Functified {
             }
         });
     }
-    
+
     take(n) {
         // using an explicit iterator supports pausable iteratables
         var iterator = this.iterable[Symbol.iterator]();
@@ -143,7 +143,7 @@ class Functified {
             }
         });
     }
-    
+
     takeUntil(predicate) {
         var iterator = this.iterable[Symbol.iterator]();
         var self = this;
@@ -167,11 +167,11 @@ class Functified {
             }
         });
     }
-    
+
     zip() {
         return Functified.zip(this.iterable);
     }
-    
+
     // static methods
     static fromGenerator(generator) {
         return functify({
@@ -214,7 +214,7 @@ class Functified {
             }
         });
     }
-    
+
     // reducing functions
     every(callback) {
         for (let value of this.iterable) {
@@ -228,7 +228,7 @@ class Functified {
     reduce(callback, initialValue) {
         let accum = initialValue;
         let iterator = this.iterable[Symbol.iterator]();
-        
+
         if (accum === undefined) {
             let result = iterator.next();
             if (result.done) {
@@ -237,7 +237,7 @@ class Functified {
                 accum = result.value;
             }
         }
-        
+
         while (true) {
             let result = iterator.next();
             if (result.done) {
@@ -246,7 +246,7 @@ class Functified {
                 accum = callback(accum, result.value);
             }
         }
-        
+
         return accum;
     }
 
@@ -258,7 +258,7 @@ class Functified {
         }
         return false;
     }
-    
+
     toArray() {
         var result = [];
         for (let value of this.iterable) {
@@ -277,7 +277,7 @@ class Functified {
                 } else {
                     yield result.value;
                 }
-            } 
+            }
         });
         functified.isPausable = true;
         return functified;

@@ -5,19 +5,19 @@ var F = Functified;
 
 describe("functify", () => {
     var numbers, result;
-    
+
     beforeEach(() => {
         numbers = functify([1,2,3,4,5]);
         result = [];
     });
-    
+
     it("should return an iterable", () => {
         for (let num of numbers) {
             result.push(num);
         }
         assert.deepEqual(result, [1,2,3,4,5]);
     });
-    
+
     it("should filter iterables", () => {
         for (let num of numbers.filter(n => n % 2)) {
             result.push(num);
@@ -31,14 +31,14 @@ describe("functify", () => {
         }
         assert.deepEqual(result, [1,4,9,16,25]);
     });
-    
+
     it("should chain methods", () => {
         for (let num of numbers.filter(n => n % 2).map(n => n * n)) {
             result.push(num);
         }
         assert.deepEqual(result, [1,9,25]);
     });
-    
+
     it("should group iterables using predicates", () => {
         var [odds, evens] = numbers.groupBy(x => x % 2, x => x % 2 === 0);
         var evenResult = [];
@@ -52,7 +52,7 @@ describe("functify", () => {
         assert.deepEqual(evenResult, [2,4]);
         assert.deepEqual(oddResult, [1,3,5]);
     });
-    
+
     it("should groupByMap using a Map of predicates", () => {
         var map = new Map();
         map.set("odd", x => x % 2);
@@ -69,7 +69,7 @@ describe("functify", () => {
             "even": [2,4]
         });
     });
-    
+
     it("should zip iterables", () => {
         var pairs = numbers.groupBy(x => x % 2, x => x % 2 === 0).zip();
         for (let pair of pairs) {
@@ -77,11 +77,11 @@ describe("functify", () => {
         }
         assert.deepEqual(result, [[1,2],[3,4]]);
     });
-    
+
     it("should produce a string representation", () => {
-        assert.equal(numbers.toString(), "[1, 2, 3, 4, 5]"); 
+        assert.equal(numbers.toString(), "[1, 2, 3, 4, 5]");
     });
-    
+
     it("should reduce to produce a sum", () => {
         var sum = numbers.reduce((accum, value) => accum + value, 0);
         assert.equal(sum, 15);
@@ -91,7 +91,7 @@ describe("functify", () => {
         var sum = numbers.reduce((accum, value) => accum + value);
         assert.equal(sum, 15);
     });
-    
+
     it("should implement some()", () => {
         result = numbers.some(num => num > 3);
         assert.equal(result, true);
@@ -105,14 +105,14 @@ describe("functify", () => {
         result = numbers.every(num => num > 1);
         assert.equal(result, false);
     });
-    
+
     it("should take the first 2", () => {
         for (let num of numbers.take(2)) {
             result.push(num);
         }
         assert.deepEqual(result, [1,2]);
     });
-    
+
     it("should take all if n > length", () => {
         for (let num of numbers.take(10)) {
             result.push(num);
@@ -120,21 +120,21 @@ describe("functify", () => {
         assert.equal(result.length, 5);
         assert.deepEqual(result, [1,2,3,4,5]);
     });
-    
+
     it("should skip the first 2", () => {
         for (let num of numbers.skip(2)) {
             result.push(num);
         }
         assert.deepEqual(result, [3,4,5]);
     });
-    
+
     it("should skip all if n >= length", () => {
         for (let num of numbers.skip(10)) {
             result.push(num);
         }
         assert.deepEqual(result, []);
     });
-    
+
     it("should skipWhile predicate is true", () => {
         for (let num of numbers.skipWhile(x => x < 3)) {
             result.push(num);
@@ -148,7 +148,7 @@ describe("functify", () => {
         }
         assert.deepEqual(result, []);
     });
-    
+
     it("should flatten nested arrays", () => {
         var nested = functify([1, [2, 3], [], [[4], 5], [[]]]);
         for (let num of nested.flatten()) {
@@ -156,7 +156,7 @@ describe("functify", () => {
         }
         assert.deepEqual(result, [1,2,3,4,5]);
     });
-    
+
     it("should remove duplicates", () => {
         numbers = functify([1, 1, 2, 3, 5]);
         for (let num of numbers.distinct()) {
@@ -164,7 +164,7 @@ describe("functify", () => {
         }
         assert.deepEqual(result, [1,2,3,5]);
     });
-    
+
     it("should loop", () => {
         for (let num of numbers.loop(2)) {
             result.push(num);
@@ -194,7 +194,7 @@ describe("functify", () => {
         }
         assert.deepEqual(result, [5, 10]);
     });
-    
+
     it("should iterate object properties as entries", () => {
         var entries = F.entries({ x:5, y:10 });
         for (let [key = 0, value = 0] of entries) {
@@ -202,12 +202,12 @@ describe("functify", () => {
         }
         assert.deepEqual(result, [["x",5],["y",10]]);
     });
-    
+
     it("should return an array", () => {
         result = numbers.toArray();
         assert.deepEqual(result, [1, 2, 3, 4, 5]);
     });
-    
+
     it("should generate a range of numbers", () => {
         for (let num of range(0,5)) {
             result.push(num);
@@ -221,7 +221,7 @@ describe("functify", () => {
         }
         assert.deepEqual(result, [5,4,3,2,1]);
     });
-    
+
     it("should always take the first n if not pausable", () => {
         for (let num of numbers.take(3)) {
             result.push(num);
@@ -234,7 +234,7 @@ describe("functify", () => {
         }
         assert.deepEqual(result, [1,2,3]);
     });
-    
+
     it("should take until a predicate is true", () => {
         for (let num of numbers.takeUntil(x => x > 2)) {
             result.push(num);
@@ -287,7 +287,7 @@ describe("functify", () => {
             }
             assert.deepEqual(result, [4,9]);
         });
-        
+
         it("should always take until from the start if not pausable", () => {
             for (let num of numbers.takeUntil(x => x > 2)) {
                 result.push(num);
@@ -315,7 +315,7 @@ describe("functify", () => {
             }
             assert.deepEqual(result, [3,4]);
         });
-        
+
         it("should filter a pausable iterable", () => {
             var pausableOdds = numbers.toPausable().filter(x => x % 2);
 
@@ -346,7 +346,7 @@ describe("functify", () => {
             assert.deepEqual(result, [3,4]);
         });
     });
-    
+
     describe("Sets", () => {
         it("should work with sets", function () {
             var colors = new Set();
