@@ -1,7 +1,5 @@
 import assert from "assert"
-import { Functified, functify, range } from "../src/functify"
-
-var F = Functified;
+import functify from "../src/functify"
 
 describe("functify", () => {
     var numbers, result;
@@ -180,7 +178,7 @@ describe("functify", () => {
     });
 
     it("should iterate object keys", () => {
-        var keys = F.keys({ x:5, y:10 });
+        var keys = functify.keys({ x:5, y:10 });
         for (let key of keys) {
             result.push(key);
         }
@@ -188,7 +186,7 @@ describe("functify", () => {
     });
 
     it("should iterate object values", () => {
-        var values = F.values({ x:5, y:10 });
+        var values = functify.values({ x:5, y:10 });
         for (let value of values) {
             result.push(value);
         }
@@ -196,7 +194,7 @@ describe("functify", () => {
     });
 
     it("should iterate object properties as entries", () => {
-        var entries = F.entries({ x:5, y:10 });
+        var entries = functify.entries({ x:5, y:10 });
         for (let [key = 0, value = 0] of entries) {
             result.push([key, value]);
         }
@@ -209,14 +207,14 @@ describe("functify", () => {
     });
 
     it("should generate a range of numbers", () => {
-        for (let num of range(0,5)) {
+        for (let num of functify.range(0,5)) {
             result.push(num);
         }
         assert.deepEqual(result, [0,1,2,3,4]);
     });
 
     it("should generate a range of numbers with a negative step", () => {
-        for (let num of range(5,0,-1)) {
+        for (let num of functify.range(5,0,-1)) {
             result.push(num);
         }
         assert.deepEqual(result, [5,4,3,2,1]);

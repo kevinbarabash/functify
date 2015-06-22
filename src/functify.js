@@ -172,49 +172,6 @@ class Functified {
         return Functified.zip(this.iterable);
     }
 
-    // static methods
-    static fromGenerator(generator) {
-        return functify({
-            [Symbol.iterator]: generator
-        });
-    }
-
-    static keys(obj) {
-        return functify(Object.keys(obj));
-    }
-
-    static values(obj) {
-        return functify(Object.keys(obj).map(key => obj[key]));
-    }
-
-    static entries(obj) {
-        return functify(Object.keys(obj)).map(key => [key, obj[key]]);
-    }
-
-    static zip(iterables) {
-        return Functified.fromGenerator(function* () {
-            var iterators = iterables.map(iterable => {
-                if (iterable[Symbol.iterator]) {
-                    return iterable[Symbol.iterator]();
-                } else {
-                    throw "can't zip a non-iterable";
-                }
-            });
-            while (true) {
-                let vector = [];
-                for (let iterator of iterators) {
-                    var result = iterator.next();
-                    if (result.done) {
-                        return; // finished
-                    } else {
-                        vector.push(result.value);
-                    }
-                }
-                yield vector;
-            }
-        });
-    }
-
     // reducing functions
     every(callback) {
         for (let value of this.iterable) {
@@ -290,37 +247,81 @@ class Functified {
         result += "]";
         return result;
     }
+
+    // static methods
+    static fromGenerator(generator) {
+        return functify({
+            [Symbol.iterator]: generator
+        });
+    }
+
+    static range(start, stop, step = 1) {
+        if (arguments.length === 1) {
+            stop = start;
+            start = 0;
+        }
+        return Functified.fromGenerator(function* () {
+            let i = start;
+            if (step > 0) {
+                while (i < stop) {
+                    yield i;
+                    i += step;
+                }
+            } else if (step < 0) {
+                while (i > stop) {
+                    yield i;
+                    i += step;
+                }
+            } else {
+                throw "step should not equal 0"
+            }
+        });
+    };
+
+    static zip(iterables) {
+        return Functified.fromGenerator(function* () {
+            var iterators = iterables.map(iterable => {
+                if (iterable[Symbol.iterator]) {
+                    return iterable[Symbol.iterator]();
+                } else {
+                    throw "can't zip a non-iterable";
+                }
+            });
+            while (true) {
+                let vector = [];
+                for (let iterator of iterators) {
+                    var result = iterator.next();
+                    if (result.done) {
+                        return; // finished
+                    } else {
+                        vector.push(result.value);
+                    }
+                }
+                yield vector;
+            }
+        });
+    }
+
+    static keys(obj) {
+        return functify(Object.keys(obj));
+    }
+
+    static values(obj) {
+        return functify(Object.keys(obj).map(key => obj[key]));
+    }
+
+    static entries(obj) {
+        return functify(Object.keys(obj)).map(key => [key, obj[key]]);
+    }
 }
 
-var functify = function(iterable) {
+export default function functify(iterable) {
     return new Functified(iterable);
 };
 
-var range = function(start, stop, step = 1) {
-    if (arguments.length === 1) {
-        stop = start;
-        start = 0;
-    }
-    return Functified.fromGenerator(function* () {
-        let i = start;
-        if (step > 0) {
-            while (i < stop) {
-                yield i;
-                i += step;
-            }
-        } else if (step < 0) {
-            while (i > stop) {
-                yield i;
-                i += step;
-            }
-        } else {
-            throw "step should not equal 0"
-        }
-    });
-};
-
-export {
-    functify,
-    Functified,
-    range
-}
+functify.fromGenerator = Functified.fromGenerator;
+functify.range = Functified.range;
+functify.zip = Functified.zip;
+functify.keys = Functified.keys;
+functify.values = Functified.values;
+functify.entries = Functified.entries;
