@@ -8,8 +8,6 @@ var _defineProperty = require("babel-runtime/helpers/define-property")["default"
 
 var _slicedToArray = require("babel-runtime/helpers/sliced-to-array")["default"];
 
-var _Object$defineProperty = require("babel-runtime/core-js/object/define-property")["default"];
-
 var _Symbol$iterator = require("babel-runtime/core-js/symbol/iterator")["default"];
 
 var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
@@ -20,10 +18,9 @@ var _Set = require("babel-runtime/core-js/set")["default"];
 
 var _Object$keys = require("babel-runtime/core-js/object/keys")["default"];
 
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
 exports["default"] = functify;
 
 var Functified = (function () {
@@ -36,10 +33,10 @@ var Functified = (function () {
 
     _createClass(Functified, [{
         key: _Symbol$iterator,
-        value: _regeneratorRuntime.mark(function callee$1$0() {
+        value: _regeneratorRuntime.mark(function value() {
             var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, value;
 
-            return _regeneratorRuntime.wrap(function callee$1$0$(context$2$0) {
+            return _regeneratorRuntime.wrap(function value$(context$2$0) {
                 while (1) switch (context$2$0.prev = context$2$0.next) {
                     case 0:
                         _iteratorNormalCompletion = true;
@@ -101,7 +98,7 @@ var Functified = (function () {
                     case "end":
                         return context$2$0.stop();
                 }
-            }, callee$1$0, this, [[3, 14, 18, 26], [19,, 21, 25]]);
+            }, value, this, [[3, 14, 18, 26], [19,, 21, 25]]);
         })
     }, {
         key: "custom",
