@@ -363,22 +363,17 @@ describe("functify", () => {
 
             assert.equal(result.length, 3);
         });
+    });
 
-        it("should work with sets", function () {
-            var colors = new Set();
-
-            colors.add("red");
-            colors.add("green");
-            colors.add("blue");
-
-            for (let color of functify(colors).map(col => col.toUpperCase())) {
-                result.push(color);
+    describe("Objects", () => {
+        it("should return an iterable of entries for Objects", () => {
+            let obj = { x: 5, y: 10 };
+            let result = {};
+            for (let [k, v] of functify(obj)) {
+                result[k] = v;
             }
-
-            assert(result.indexOf("RED") !== -1);
-            assert(result.indexOf("GREEN") !== -1);
-            assert(result.indexOf("BLUE") !== -1);
-            assert.equal(result.length, 3);
+            assert.equal(result.x, 5);
+            assert.equal(result.y, 10);
         });
     });
 });

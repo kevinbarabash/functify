@@ -316,7 +316,11 @@ class Functified {
 }
 
 export default function functify(iterable) {
-    return new Functified(iterable);
+    if (iterable.constructor === Object && !iterable[Symbol.iterator]) {
+        return Functified.entries(iterable);
+    } else {
+        return new Functified(iterable);
+    }
 };
 
 functify.fromGenerator = Functified.fromGenerator;
