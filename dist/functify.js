@@ -8,6 +8,8 @@ var _defineProperty = require("babel-runtime/helpers/define-property")["default"
 
 var _slicedToArray = require("babel-runtime/helpers/sliced-to-array")["default"];
 
+var _Object$defineProperty = require("babel-runtime/core-js/object/define-property")["default"];
+
 var _Symbol$iterator = require("babel-runtime/core-js/symbol/iterator")["default"];
 
 var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
@@ -18,9 +20,10 @@ var _Set = require("babel-runtime/core-js/set")["default"];
 
 var _Object$keys = require("babel-runtime/core-js/object/keys")["default"];
 
-Object.defineProperty(exports, "__esModule", {
+_Object$defineProperty(exports, "__esModule", {
     value: true
 });
+
 exports["default"] = functify;
 
 var Functified = (function () {
@@ -33,10 +36,10 @@ var Functified = (function () {
 
     _createClass(Functified, [{
         key: _Symbol$iterator,
-        value: _regeneratorRuntime.mark(function value() {
+        value: _regeneratorRuntime.mark(function callee$1$0() {
             var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, value;
 
-            return _regeneratorRuntime.wrap(function value$(context$2$0) {
+            return _regeneratorRuntime.wrap(function callee$1$0$(context$2$0) {
                 while (1) switch (context$2$0.prev = context$2$0.next) {
                     case 0:
                         _iteratorNormalCompletion = true;
@@ -98,7 +101,7 @@ var Functified = (function () {
                     case "end":
                         return context$2$0.stop();
                 }
-            }, value, this, [[3, 14, 18, 26], [19,, 21, 25]]);
+            }, callee$1$0, this, [[3, 14, 18, 26], [19,, 21, 25]]);
         })
     }, {
         key: "custom",
@@ -716,6 +719,7 @@ var Functified = (function () {
             // using an explicit iterator supports pausable iteratables
             var iterator = _getIterator(this.iterable);
             var self = this;
+            // TODO: use a Symbol for "startValue"
             return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
                 var i, result;
                 return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
@@ -826,6 +830,81 @@ var Functified = (function () {
             }));
         }
     }, {
+        key: "enumerate",
+        value: function enumerate() {
+            var start = arguments[0] === undefined ? 0 : arguments[0];
+
+            var iterable = this.iterable;
+            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+                var i, _iteratorNormalCompletion9, _didIteratorError9, _iteratorError9, _iterator9, _step9, value;
+
+                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                    while (1) switch (context$3$0.prev = context$3$0.next) {
+                        case 0:
+                            i = start;
+                            _iteratorNormalCompletion9 = true;
+                            _didIteratorError9 = false;
+                            _iteratorError9 = undefined;
+                            context$3$0.prev = 4;
+                            _iterator9 = _getIterator(iterable);
+
+                        case 6:
+                            if (_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done) {
+                                context$3$0.next = 13;
+                                break;
+                            }
+
+                            value = _step9.value;
+                            context$3$0.next = 10;
+                            return [i++, value];
+
+                        case 10:
+                            _iteratorNormalCompletion9 = true;
+                            context$3$0.next = 6;
+                            break;
+
+                        case 13:
+                            context$3$0.next = 19;
+                            break;
+
+                        case 15:
+                            context$3$0.prev = 15;
+                            context$3$0.t0 = context$3$0["catch"](4);
+                            _didIteratorError9 = true;
+                            _iteratorError9 = context$3$0.t0;
+
+                        case 19:
+                            context$3$0.prev = 19;
+                            context$3$0.prev = 20;
+
+                            if (!_iteratorNormalCompletion9 && _iterator9["return"]) {
+                                _iterator9["return"]();
+                            }
+
+                        case 22:
+                            context$3$0.prev = 22;
+
+                            if (!_didIteratorError9) {
+                                context$3$0.next = 25;
+                                break;
+                            }
+
+                            throw _iteratorError9;
+
+                        case 25:
+                            return context$3$0.finish(22);
+
+                        case 26:
+                            return context$3$0.finish(19);
+
+                        case 27:
+                        case "end":
+                            return context$3$0.stop();
+                    }
+                }, callee$2$0, this, [[4, 15, 19, 27], [20,, 22, 26]]);
+            }));
+        }
+    }, {
         key: "zip",
         value: function zip() {
             return Functified.zip(this.iterable);
@@ -835,29 +914,29 @@ var Functified = (function () {
 
         // reducing functions
         value: function every(callback) {
-            var _iteratorNormalCompletion9 = true;
-            var _didIteratorError9 = false;
-            var _iteratorError9 = undefined;
+            var _iteratorNormalCompletion10 = true;
+            var _didIteratorError10 = false;
+            var _iteratorError10 = undefined;
 
             try {
-                for (var _iterator9 = _getIterator(this.iterable), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
-                    var value = _step9.value;
+                for (var _iterator10 = _getIterator(this.iterable), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+                    var value = _step10.value;
 
                     if (!callback(value)) {
                         return false;
                     }
                 }
             } catch (err) {
-                _didIteratorError9 = true;
-                _iteratorError9 = err;
+                _didIteratorError10 = true;
+                _iteratorError10 = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion9 && _iterator9["return"]) {
-                        _iterator9["return"]();
+                    if (!_iteratorNormalCompletion10 && _iterator10["return"]) {
+                        _iterator10["return"]();
                     }
                 } finally {
-                    if (_didIteratorError9) {
-                        throw _iteratorError9;
+                    if (_didIteratorError10) {
+                        throw _iteratorError10;
                     }
                 }
             }
@@ -893,39 +972,6 @@ var Functified = (function () {
     }, {
         key: "some",
         value: function some(callback) {
-            var _iteratorNormalCompletion10 = true;
-            var _didIteratorError10 = false;
-            var _iteratorError10 = undefined;
-
-            try {
-                for (var _iterator10 = _getIterator(this.iterable), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
-                    var value = _step10.value;
-
-                    if (callback(value)) {
-                        return true;
-                    }
-                }
-            } catch (err) {
-                _didIteratorError10 = true;
-                _iteratorError10 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion10 && _iterator10["return"]) {
-                        _iterator10["return"]();
-                    }
-                } finally {
-                    if (_didIteratorError10) {
-                        throw _iteratorError10;
-                    }
-                }
-            }
-
-            return false;
-        }
-    }, {
-        key: "toArray",
-        value: function toArray() {
-            var result = [];
             var _iteratorNormalCompletion11 = true;
             var _didIteratorError11 = false;
             var _iteratorError11 = undefined;
@@ -934,7 +980,9 @@ var Functified = (function () {
                 for (var _iterator11 = _getIterator(this.iterable), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
                     var value = _step11.value;
 
-                    result.push(value);
+                    if (callback(value)) {
+                        return true;
+                    }
                 }
             } catch (err) {
                 _didIteratorError11 = true;
@@ -947,6 +995,37 @@ var Functified = (function () {
                 } finally {
                     if (_didIteratorError11) {
                         throw _iteratorError11;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }, {
+        key: "toArray",
+        value: function toArray() {
+            var result = [];
+            var _iteratorNormalCompletion12 = true;
+            var _didIteratorError12 = false;
+            var _iteratorError12 = undefined;
+
+            try {
+                for (var _iterator12 = _getIterator(this.iterable), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
+                    var value = _step12.value;
+
+                    result.push(value);
+                }
+            } catch (err) {
+                _didIteratorError12 = true;
+                _iteratorError12 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion12 && _iterator12["return"]) {
+                        _iterator12["return"]();
+                    }
+                } finally {
+                    if (_didIteratorError12) {
+                        throw _iteratorError12;
                     }
                 }
             }
@@ -1088,7 +1167,7 @@ var Functified = (function () {
         key: "zip",
         value: function zip(iterables) {
             return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
-                var iterators, vector, _iteratorNormalCompletion12, _didIteratorError12, _iteratorError12, _iterator12, _step12, iterator, result;
+                var iterators, vector, _iteratorNormalCompletion13, _didIteratorError13, _iteratorError13, _iterator13, _step13, iterator, result;
 
                 return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
@@ -1108,19 +1187,19 @@ var Functified = (function () {
                             }
 
                             vector = [];
-                            _iteratorNormalCompletion12 = true;
-                            _didIteratorError12 = false;
-                            _iteratorError12 = undefined;
+                            _iteratorNormalCompletion13 = true;
+                            _didIteratorError13 = false;
+                            _iteratorError13 = undefined;
                             context$3$0.prev = 6;
-                            _iterator12 = _getIterator(iterators);
+                            _iterator13 = _getIterator(iterators);
 
                         case 8:
-                            if (_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done) {
+                            if (_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done) {
                                 context$3$0.next = 19;
                                 break;
                             }
 
-                            iterator = _step12.value;
+                            iterator = _step13.value;
                             result = iterator.next();
 
                             if (!result.done) {
@@ -1134,7 +1213,7 @@ var Functified = (function () {
                             vector.push(result.value);
 
                         case 16:
-                            _iteratorNormalCompletion12 = true;
+                            _iteratorNormalCompletion13 = true;
                             context$3$0.next = 8;
                             break;
 
@@ -1145,26 +1224,26 @@ var Functified = (function () {
                         case 21:
                             context$3$0.prev = 21;
                             context$3$0.t0 = context$3$0["catch"](6);
-                            _didIteratorError12 = true;
-                            _iteratorError12 = context$3$0.t0;
+                            _didIteratorError13 = true;
+                            _iteratorError13 = context$3$0.t0;
 
                         case 25:
                             context$3$0.prev = 25;
                             context$3$0.prev = 26;
 
-                            if (!_iteratorNormalCompletion12 && _iterator12["return"]) {
-                                _iterator12["return"]();
+                            if (!_iteratorNormalCompletion13 && _iterator13["return"]) {
+                                _iterator13["return"]();
                             }
 
                         case 28:
                             context$3$0.prev = 28;
 
-                            if (!_didIteratorError12) {
+                            if (!_didIteratorError13) {
                                 context$3$0.next = 31;
                                 break;
                             }
 
-                            throw _iteratorError12;
+                            throw _iteratorError13;
 
                         case 31:
                             return context$3$0.finish(28);
@@ -1212,7 +1291,11 @@ var Functified = (function () {
 })();
 
 function functify(iterable) {
-    return new Functified(iterable);
+    if (iterable.constructor === Object && !iterable[_Symbol$iterator]) {
+        return Functified.entries(iterable);
+    } else {
+        return new Functified(iterable);
+    }
 }
 
 ;
