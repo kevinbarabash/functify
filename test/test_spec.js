@@ -206,20 +206,6 @@ describe("functify", () => {
         assert.deepEqual(result, [1, 2, 3, 4, 5]);
     });
 
-    it("should generate a range of numbers", () => {
-        for (let num of functify.range(0,5)) {
-            result.push(num);
-        }
-        assert.deepEqual(result, [0,1,2,3,4]);
-    });
-
-    it("should generate a range of numbers with a negative step", () => {
-        for (let num of functify.range(5,0,-1)) {
-            result.push(num);
-        }
-        assert.deepEqual(result, [5,4,3,2,1]);
-    });
-
     it("should always take the first n if not pausable", () => {
         for (let num of numbers.take(3)) {
             result.push(num);
@@ -238,6 +224,36 @@ describe("functify", () => {
             result.push(num);
         }
         assert.deepEqual(result, [1,2]);
+    });
+
+    describe("range", () => {
+        it("should generate a range of numbers", () => {
+            for (let num of functify.range(0,5)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [0,1,2,3,4]);
+        });
+
+        it("should generate a range of numbers with a negative step", () => {
+            for (let num of functify.range(5,0,-1)) {
+                result.push(num);
+            }
+            assert.deepEqual(result, [5,4,3,2,1]);
+        });
+
+        it("should generate numbers to Infinity", () => {
+            for (let num of functify.range(0, Infinity).take(20)) {
+                result.push(num);
+            }
+            assert.equal(result[19], 19);
+        });
+
+        it("should generate numbers to -Infinity", () => {
+            for (let num of functify.range(0, -Infinity, -1).take(20)) {
+                result.push(num);
+            }
+            assert.equal(result[19], -19);
+        });
     });
 
     describe("Pausables", () => {
