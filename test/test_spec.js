@@ -226,6 +226,30 @@ describe("functify", () => {
         assert.deepEqual(result, [1,2]);
     });
 
+    describe("enumerate", () => {
+        it("should iterate over [index, value] entries", function () {
+            let results = {};
+            let fruit = ["apple", "banana", "grapes"];
+            for (let [k, v] of functify(fruit).enumerate()) {
+                results[k] = v;
+            }
+            assert.equal(results[0], "apple");
+            assert.equal(results[1], "banana");
+            assert.equal(results[2], "grapes");
+        });
+
+        it("should start at the given index", function () {
+            let results = {};
+            let fruit = ["apple", "banana", "grapes"];
+            for (let [k, v] of functify(fruit).enumerate(1)) {
+                results[k] = v;
+            }
+            assert.equal(results[1], "apple");
+            assert.equal(results[2], "banana");
+            assert.equal(results[3], "grapes");
+        });
+    });
+
     describe("range", () => {
         it("should generate a range of numbers", () => {
             for (let num of functify.range(0,5)) {

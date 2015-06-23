@@ -126,6 +126,7 @@ class Functified {
         // using an explicit iterator supports pausable iteratables
         var iterator = this.iterable[Symbol.iterator]();
         var self = this;
+        // TODO: use a Symbol for "startValue"
         return Functified.fromGenerator(function* () {
             let i = 0;
             if (self.hasOwnProperty("startValue") && self.isPausable) {
@@ -164,6 +165,16 @@ class Functified {
                         yield result.value;
                     }
                 }
+            }
+        });
+    }
+
+    enumerate(start = 0) {
+        var iterable = this.iterable;
+        return Functified.fromGenerator(function* () {
+            let i = start;
+            for (let value of iterable) {
+                yield [i++, value];
             }
         });
     }
