@@ -31,24 +31,20 @@ to transpile your project from ES6 to ES5 when using this library.
 
     let numbers = f([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     
-    console.log("odds:");
     for ( let odd in numbers.filter(n => n % 2) ) {
-        console.log(n);
+        console.log(n);  // 1, 3, 5, ...
     }
     
-    console.log("evens:");
     for ( let even in numbers.filter(n => !(n % 2)) ) {
-        console.log(n);
+        console.log(n);  // 2, 4, 6, ...
     }
     
-    console.log("pairs:");
     for ( let [odd, even] in numbers.split(n => n % 2, n => !(n % 2)).zip() ) {
-        console.log(`odd = ${odd}, even = ${even}`);
+        console.log(`odd = ${odd}, even = ${even}`);  // [1, 2], [3, 4], ...
     }
     
-    console.log("first 3 squares:");
     for ( let square in numbers.take(3).map(n => n * n) ) {
-        console.log(square);
+        console.log(square);  // 1, 4, 9
     }
 
 ## Details
