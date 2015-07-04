@@ -415,5 +415,81 @@ describe("functify", () => {
             assert.equal(result.x, 5);
             assert.equal(result.y, 10);
         });
+
+        it("should have .keys()", () => {
+            let obj = { x: 5, y: 10 };
+            let result = [];
+            for (let key of functify(obj).keys()) {
+                result.push(key);
+            }
+            assert.deepEqual(result, ['x', 'y']);
+        });
+
+        it("should have .values()", () => {
+            let obj = { x: 5, y: 10 };
+            let result = [];
+            for (let value of functify(obj).values()) {
+                result.push(value);
+            }
+            assert.deepEqual(result, [5, 10]);
+        });
+
+        it("should have .entries()", () => {
+            let obj = { x: 5, y: 10 };
+            let result = {};
+            for (let [k, v] of functify(obj).entries()) {
+                result[k] = v;
+            }
+            assert.equal(result.x, 5);
+            assert.equal(result.y, 10);
+        });
+    });
+
+    describe("Maps", () => {
+        it("should return an iterable of entries for Maps", () => {
+            let map = new Map();
+            map.set('x', 5);
+            map.set('y', 10);
+            let result = {};
+            for (let [k, v] of functify(map)) {
+                result[k] = v;
+            }
+            assert.equal(result.x, 5);
+            assert.equal(result.y, 10);
+        });
+
+        it("should have .keys()", () => {
+            let map = new Map();
+            map.set('x', 5);
+            map.set('y', 10);
+            let result = [];
+            for (let key of functify(map).keys()) {
+                result.push(key);
+            }
+            assert.deepEqual(result, ['x', 'y']);
+        });
+
+        it("should have .values()", () => {
+            let map = new Map();
+            map.set('x', 5);
+            map.set('y', 10);
+            let result = [];
+            for (let value of map.values()) {
+                result.push(value);
+            }
+            assert.deepEqual(result, [5, 10]);
+        });
+
+        it("should have .entries()", () => {
+            let map = new Map();
+            map.set('x', 5);
+            map.set('y', 10);
+            let result = {};
+            for (let [k, v] of functify(map).entries()) {
+                result[k] = v;
+            }
+            assert.equal(result.x, 5);
+            assert.equal(result.y, 10);
+        });
     });
 });

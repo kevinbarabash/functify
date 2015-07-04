@@ -3,6 +3,10 @@
 class Functified {
 
     constructor(iterable) {
+        // avoid re-wrapping iterables that have already been Functified
+        if (iterable.isFunctified) {
+            return iterable;
+        }
         this.iterable = iterable;
         this.isFunctified = true;
     }
@@ -126,7 +130,6 @@ class Functified {
         // using an explicit iterator supports pausable iteratables
         var iterator = this.iterable[Symbol.iterator]();
         var self = this;
-        // TODO: use a Symbol for "startValue"
         return Functified.fromGenerator(function* () {
             let i = 0;
             if (self.hasOwnProperty("startValue") && self.isPausable) {
@@ -227,6 +230,30 @@ class Functified {
         return false;
     }
 
+    entries() {
+        if (this.iterable.entries) {
+            return new Functified(this.iterable.entries());
+        } else {
+            throw "doesn't have entries";
+        }
+    }
+
+    keys() {
+        if (this.iterable.keys) {
+            return new Functified(this.iterable.keys());
+        } else {
+            throw "doesn't have keys";
+        }
+    }
+
+    values() {
+        if (this.iterable.values) {
+            return new Functified(this.iterable.values());
+        } else {
+            throw "doesn't have values";
+        }
+    }
+
     toArray() {
         var result = [];
         for (let value of this.iterable) {
@@ -263,6 +290,45 @@ class Functified {
     static fromGenerator(generator) {
         return functify({
             [Symbol.iterator]: generator
+        });
+    }
+
+    static fromObject(obj) {
+        return functify({
+            [Symbol.iterator]: function* () {
+                for (var key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        yield [key, obj[key]];
+                    }
+                }
+            },
+            entries() {
+                return Functified.fromGenerator(function* () {
+                    for (var key in obj) {
+                        if (obj.hasOwnProperty(key)) {
+                            yield [key, obj[key]];
+                        }
+                    }
+                });
+            },
+            keys() {
+                return Functified.fromGenerator(function* () {
+                    for (var key in obj) {
+                        if (obj.hasOwnProperty(key)) {
+                            yield key;
+                        }
+                    }
+                });
+            },
+            values() {
+                return Functified.fromGenerator(function* () {
+                    for (var key in obj) {
+                        if (obj.hasOwnProperty(key)) {
+                            yield obj[key];
+                        }
+                    }
+                });
+            }
         });
     }
 
@@ -314,25 +380,46 @@ class Functified {
     }
 
     static keys(obj) {
-        return functify(Object.keys(obj));
+        console.log("this method is deprecated and will be removed in 0.3.0");
+        if (!(obj instanceof Object)) {
+            throw "can't get keys for a non-object"
+        }
+        return Functified.fromGenerator(function* () {
+            for (var key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    yield key;
+                }
+            }
+        });
     }
 
     static values(obj) {
-        return functify(Object.keys(obj).map(key => obj[key]));
+        console.log("this method is deprecated and will be removed in 0.3.0");
+        return Functified.keys(obj).map(key => obj[key]);
     }
 
     static entries(obj) {
-        return functify(Object.keys(obj)).map(key => [key, obj[key]]);
+        console.log("this method is deprecated and will be removed in 0.3.0");
+        if (!(obj instanceof Object)) {
+            throw "can't get keys for a non-object"
+        }
+        return Functified.fromGenerator(function* () {
+            for (var key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    yield [key, obj[key]];
+                }
+            }
+        });
     }
 }
 
-export default function functify(iterable) {
+function functify(iterable) {
     if (iterable.constructor === Object && !iterable[Symbol.iterator]) {
-        return Functified.entries(iterable);
+        return Functified.fromObject(iterable);
     } else {
         return new Functified(iterable);
     }
-};
+}
 
 functify.fromGenerator = Functified.fromGenerator;
 functify.range = Functified.range;
@@ -340,3 +427,5 @@ functify.zip = Functified.zip;
 functify.keys = Functified.keys;
 functify.values = Functified.values;
 functify.entries = Functified.entries;
+
+export default functify;
