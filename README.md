@@ -2,7 +2,7 @@
 
 # functify
 
-Add functional methods like map, reduce, filter, etc. iterables (ES6 Iterators).
+Add functional methods like map, reduce, filter, etc. to iterables (ES6 Iterators).
 
 ## Why
 

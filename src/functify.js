@@ -19,8 +19,7 @@ class Functified {
 
     // fn(iterable) -> generator function
     custom(fn) {
-        var generator = fn(this.iterable);
-        return Functified.fromGenerator(generator);
+        return Functified.fromGenerator(fn(this.iterable));
     }
 
     // alias dedupe, unique
@@ -62,21 +61,14 @@ class Functified {
     }
 
     groupBy(...predicates) {
-        if (predicates.length > 1) {
-            return functify(predicates.map(fn => this.filter(fn)));
-        }
+        return functify(predicates.map(fn => this.filter(fn)));
     }
 
     groupByMap(map) {
-        return functify(
-            functify(map).map(([name, fn]) => [name, this.filter(fn)])
-        );
+        return functify(map).map(([name, fn]) => [name, this.filter(fn)]);
     }
 
-    // be careful with this one
-    // could combine this with with take
-    // consider using 2 as the default number of loops
-    loop(n = Infinity) {
+    repeat(n = 1) {
         var iterable = this.iterable;
         return Functified.fromGenerator(function* () {
             var i = 0;
@@ -86,6 +78,12 @@ class Functified {
                 }
             }
         });
+    }
+
+    // alias for repeat
+    loop(n = 1) {
+        console.warn("deprecating loop(n), use repeat(n) instead");
+        return this.repeat(n);
     }
 
     map(callback) {
@@ -380,7 +378,8 @@ class Functified {
     }
 
     static keys(obj) {
-        console.log("this method is deprecated and will be removed in 0.3.0");
+        console.warn("functify.keys is deprecated and will be removed in 0.3.0");
+        console.warn("use functify(obj).keys() instead");
         if (!(obj instanceof Object)) {
             throw "can't get keys for a non-object"
         }
@@ -394,12 +393,14 @@ class Functified {
     }
 
     static values(obj) {
-        console.log("this method is deprecated and will be removed in 0.3.0");
+        console.log("functify.values is deprecated and will be removed in 0.3.0");
+        console.warn("use functify(obj).values() instead");
         return Functified.keys(obj).map(key => obj[key]);
     }
 
     static entries(obj) {
-        console.log("this method is deprecated and will be removed in 0.3.0");
+        console.log("functify.entries is deprecated and will be removed in 0.3.0");
+        console.warn("use functify(obj).entries() instead");
         if (!(obj instanceof Object)) {
             throw "can't get keys for a non-object"
         }
@@ -414,7 +415,7 @@ class Functified {
 }
 
 function functify(iterable) {
-    if (iterable.constructor === Object && !iterable[Symbol.iterator]) {
+    if (!iterable[Symbol.iterator]) {
         return Functified.fromObject(iterable);
     } else {
         return new Functified(iterable);

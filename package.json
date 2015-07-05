@@ -7,9 +7,10 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register test",
+    "test": "mocha --compilers js:babel-core/register test/test_spec.js",
     "build": "babel src/functify.js -o dist/functify.js --optional runtime",
-    "browser": "browserify ./src/functify.js -t babelify --outfile dist/functify-browser.js --standalone functify"
+    "browser": "browserify ./src/functify.js -t [ babelify --blacklist regenerator --blacklist es6.forOf ] --outfile dist/functify-browser.js --standalone functify",
+    "browser_test": "browserify ./test/test_spec.js -t [ babelify --blacklist regenerator --blacklist es6.forOf ] --outfile test/browser_test_spec.js"
   },
   "repository": {
     "type": "git",
