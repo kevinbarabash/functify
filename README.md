@@ -41,7 +41,55 @@ methods can be called in-line as opposed composing function _a priori_.
         console.log(square);  // 1, 4, 9
     }
     
-## Details
+## Maps and Objects
+
+The new Map class in ES6 has three methods which return iterators:
+
+- `keys()`
+- `values()`
+- `entries()`
+
+A Map instance itself can be used as an iterator, e.g.
+
+    let map = new Map();
+    map.set('x', 5);
+    map.set('y', 10);
+    
+    for (let [k, v] of map) {
+        console.log(`map['${k}'] = ${v}`);  // map['x'] = 5, map['y'] = 10
+    }
+    
+`functify` wraps Map instances and exposes versions of `keys()`, `values()`, 
+and `entries()` that methods like `map()` and `filter()` can be chained to, e.g.
+
+    for (let v2 of functify(map).entries().map(pair => pair[1] * pair[1]) {
+        console.log(v2);  // 25, 100
+    }
+    
+Note: chaining in the opposite order is not allowed because map may return 
+something that isn't an entry, i.e. a [key, value] pair.
+
+Plain old JavaScript objects do not have methods.  ES5 has the static method
+`Object.keys()` and there is a pre-strawman proposal to add `Object.values()`
+and `Object.entries()`.  The problem with these methods is that they return 
+arrays which consume memory.
+
+`functify` wraps Object instances, adding `keys()`, `values()`, and `entries()`
+methods along with all the other methods that `functify` provides.
+
+    let obj = {
+        x: 5,
+        y: 10
+    }
+    
+    for (let [k, v] of functify(obj)) {
+        console.log(`obj['${k}'] = ${v}`);  // obj['x'] = 5, obj['y'] = 10
+    }
+    
+The combines the simple creation and access syntax of Objects with the powerful
+iterators provided by Map.
+    
+## Implementation Details
 
 functify wraps iterables in an object with methods to performan map, reduce, 
 filter, etc.  This object is also iterable.  Here's how:
@@ -78,55 +126,6 @@ This allows methods to be easily implemented.  Here's the implementation for `ma
             }
         });
     }
-
-## Map and Object
-
-The new Map class in ES6 has three methods which return iterators:
-
-- `keys()`
-- `values()`
-- `entries()`
-
-A Map instance itself can be used as an iterator, e.g.
-
-    let map = new Map();
-    map.set('x', 5);
-    map.set('y', 10);
-    
-    for (let [k, v] of map) {
-        console.log(`map['${k}'] = ${v}`);  // map['x'] = 5, map['y'] = 10
-    }
-    
-`functify` wraps Map instances and exposes `Functified` versions of `keys()`, 
-`values()`, and `entries()`.  This means that methods like `map()` and `filter()` 
-can be chained, e.g.
-
-    for (let v2 of functify(map).entries().map(pair => pair[1] * pair[1]) {
-        console.log(v2);  // 25, 100
-    }
-    
-Note: chaining in the opposite order is not allowed because map may return 
-something that isn't an entry, i.e. a [key, value] pair.
-
-Plain old JavaScript objects do not have methods.  ES5 has the static method
-`Object.keys()` and there is a pre-strawman proposal to add `Object.values()`
-and `Object.entries()`.  The problem with these methods is that they return 
-arrays which consume memory.
-
-`functify` wraps Object instances, adding `keys()`, `values()`, and `entries()`
-methods along with all the other methods that `functify` provides.
-
-    let obj = {
-        x: 5,
-        y: 10
-    }
-    
-    for (let [k, v] of functify(obj)) {
-        console.log(`obj['${k}'] = ${v}`);  // obj['x'] = 5, obj['y'] = 10
-    }
-    
-The combines the simple creation and access syntax of Objects with the powerful
-iterators provided by Map.
 
 ## Pausable
 
