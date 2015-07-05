@@ -491,5 +491,16 @@ describe("functify", () => {
             assert.equal(result.x, 5);
             assert.equal(result.y, 10);
         });
+
+        it("should return chainable iterators", () => {
+            let map = new Map();
+            map.set('x', 5);
+            map.set('y', 10);
+            let result = [];
+            for (let v of functify(map).entries().map(pair => pair[1] * pair[1])) {
+                result.push(v);
+            }
+            assert.deepEqual(result, [25, 100]);
+        });
     });
 });

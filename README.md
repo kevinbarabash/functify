@@ -12,18 +12,12 @@ would be nice if all iterables had access these functions.
 
 Unfortunately, the Array versions of map and filter return a new array.  This
 results in wasted memory allocation when chaining map and filter.  Iterators fix
-this.  Avalue is only computed when the final iterator in chain is asked for the
+this.  A value is only computed when the final iterator in chain is asked for the
 next value.  The intermediate values are passed through the chain but aren't 
 permenantly stored anywhere.
 
 This sounds an awful like transducers.  It is, the main difference is that 
 methods can be called in-line as opposed composing function _a priori_.
-
-## Requires
-
-This approach uses ES6 and specifically generators which aren't supported by 
-many browsers yet.  For full browser support please use [babel](http://babeljs.io/)
-to transpile your project from ES6 to ES5 when using this library.
 
 ## Usage
 
@@ -31,22 +25,22 @@ to transpile your project from ES6 to ES5 when using this library.
 
     let numbers = f([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     
-    for ( let odd in numbers.filter(n => n % 2) ) {
+    for (let odd in numbers.filter(n => n % 2)) {
         console.log(n);  // 1, 3, 5, ...
     }
     
-    for ( let even in numbers.filter(n => !(n % 2)) ) {
+    for (let even in numbers.filter(n => !(n % 2))) {
         console.log(n);  // 2, 4, 6, ...
     }
     
-    for ( let [odd, even] in numbers.split(n => n % 2, n => !(n % 2)).zip() ) {
+    for (let [odd, even] in numbers.split(n => n % 2, n => !(n % 2)).zip()) {
         console.log(`odd = ${odd}, even = ${even}`);  // [1, 2], [3, 4], ...
     }
     
-    for ( let square in numbers.take(3).map(n => n * n) ) {
+    for (let square in numbers.take(3).map(n => n * n)) {
         console.log(square);  // 1, 4, 9
     }
-
+    
 ## Details
 
 functify wraps iterables in an object with methods to performan map, reduce, 
@@ -84,6 +78,55 @@ This allows methods to be easily implemented.  Here's the implementation for `ma
             }
         });
     }
+
+## Map and Object
+
+The new Map class in ES6 has three methods which return iterators:
+
+- `keys()`
+- `values()`
+- `entries()`
+
+A Map instance itself can be used as an iterator, e.g.
+
+    let map = new Map();
+    map.set('x', 5);
+    map.set('y', 10);
+    
+    for (let [k, v] of map) {
+        console.log(`map['${k}'] = ${v}`);  // map['x'] = 5, map['y'] = 10
+    }
+    
+`functify` wraps Map instances and exposes `Functified` versions of `keys()`, 
+`values()`, and `entries()`.  This means that methods like `map()` and `filter()` 
+can be chained, e.g.
+
+    for (let v2 of functify(map).entries().map(pair => pair[1] * pair[1]) {
+        console.log(v2);  // 25, 100
+    }
+    
+Note: chaining in the opposite order is not allowed because map may return 
+something that isn't an entry, i.e. a [key, value] pair.
+
+Plain old JavaScript objects do not have methods.  ES5 has the static method
+`Object.keys()` and there is a pre-strawman proposal to add `Object.values()`
+and `Object.entries()`.  The problem with these methods is that they return 
+arrays which consume memory.
+
+`functify` wraps Object instances, adding `keys()`, `values()`, and `entries()`
+methods along with all the other methods that `functify` provides.
+
+    let obj = {
+        x: 5,
+        y: 10
+    }
+    
+    for (let [k, v] of functify(obj)) {
+        console.log(`obj['${k}'] = ${v}`);  // obj['x'] = 5, obj['y'] = 10
+    }
+    
+The combines the simple creation and access syntax of Objects with the powerful
+iterators provided by Map.
 
 ## Pausable
 
