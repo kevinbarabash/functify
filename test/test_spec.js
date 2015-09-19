@@ -164,42 +164,18 @@ describe("functify", () => {
             assert.deepEqual(result, [1,2,3,5]);
         });
 
-        it("should loop", () => {
-            for (let num of numbers.loop(2)) {
+        it("should repeat", () => {
+            for (let num of numbers.repeat(2)) {
                 result.push(num);
             }
             assert.deepEqual(result, [1,2,3,4,5,1,2,3,4,5]);
         });
 
         it("should stop an infinite loop with take", () => {
-            for (let num of numbers.loop(Infinity).take(8)) {
+            for (let num of numbers.repeat(Infinity).take(8)) {
                 result.push(num);
             }
             assert.deepEqual(result, [1,2,3,4,5,1,2,3]);
-        });
-
-        it("should iterate object keys", () => {
-            var keys = functify.keys({ x:5, y:10 });
-            for (let key of keys) {
-                result.push(key);
-            }
-            assert.deepEqual(result, ["x", "y"]);
-        });
-
-        it("should iterate object values", () => {
-            var values = functify.values({ x:5, y:10 });
-            for (let value of values) {
-                result.push(value);
-            }
-            assert.deepEqual(result, [5, 10]);
-        });
-
-        it("should iterate object properties as entries", () => {
-            var entries = functify.entries({ x:5, y:10 });
-            for (let [key = 0, value = 0] of entries) {
-                result.push([key, value]);
-            }
-            assert.deepEqual(result, [["x",5],["y",10]]);
         });
 
         it("should return an array", () => {

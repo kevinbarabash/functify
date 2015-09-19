@@ -376,42 +376,6 @@ class Functified {
             }
         });
     }
-
-    static keys(obj) {
-        console.warn("functify.keys is deprecated and will be removed in 0.3.0");
-        console.warn("use functify(obj).keys() instead");
-        if (!(obj instanceof Object)) {
-            throw "can't get keys for a non-object"
-        }
-        return Functified.fromGenerator(function* () {
-            for (var key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    yield key;
-                }
-            }
-        });
-    }
-
-    static values(obj) {
-        console.log("functify.values is deprecated and will be removed in 0.3.0");
-        console.warn("use functify(obj).values() instead");
-        return Functified.keys(obj).map(key => obj[key]);
-    }
-
-    static entries(obj) {
-        console.log("functify.entries is deprecated and will be removed in 0.3.0");
-        console.warn("use functify(obj).entries() instead");
-        if (!(obj instanceof Object)) {
-            throw "can't get keys for a non-object"
-        }
-        return Functified.fromGenerator(function* () {
-            for (var key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    yield [key, obj[key]];
-                }
-            }
-        });
-    }
 }
 
 function functify(iterable) {
