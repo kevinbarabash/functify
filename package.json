@@ -9,8 +9,7 @@
   "scripts": {
     "test": "mocha --compilers js:babel-core/register test/test_spec.js",
     "build": "babel src/functify.js -o dist/functify.js --optional runtime",
-    "browser": "browserify ./src/functify.js -t [ babelify --blacklist regenerator --blacklist es6.forOf ] --outfile dist/functify-browser.js --standalone functify",
-    "browser_test": "browserify ./test/test_spec.js -t [ babelify --blacklist regenerator --blacklist es6.forOf ] --outfile test/browser_test_spec.js"
+    "browser": "browserify ./src/functify.js -t [ babelify] --outfile dist/functify-browser.js --standalone functify"
   },
   "repository": {
     "type": "git",
@@ -19,12 +18,11 @@
   "author": "Kevin Barabash <kevinb7@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "babel": "^5.5.8",
-    "babel-core": "^5.5.8",
-    "babelify": "^6.1.2",
-    "browserify": "^10.2.4",
-    "mocha": "^2.1.0",
-    "node-libs-browser": "^0.5.2"
+    "babel": "^5.8.23",
+    "babel-core": "^5.8.25",
+    "babelify": "^6.3.0",
+    "browserify": "^11.1.0",
+    "mocha": "^2.1.0"
   },
   "dependencies": {
     "babel-runtime": "^5.6.3"

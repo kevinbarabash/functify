@@ -8,8 +8,6 @@ var _defineProperty = require("babel-runtime/helpers/define-property")["default"
 
 var _slicedToArray = require("babel-runtime/helpers/sliced-to-array")["default"];
 
-var _Object$defineProperty = require("babel-runtime/core-js/object/define-property")["default"];
-
 var _Symbol$iterator = require("babel-runtime/core-js/symbol/iterator")["default"];
 
 var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
@@ -18,28 +16,28 @@ var _getIterator = require("babel-runtime/core-js/get-iterator")["default"];
 
 var _Set = require("babel-runtime/core-js/set")["default"];
 
-var _Object$keys = require("babel-runtime/core-js/object/keys")["default"];
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-exports["default"] = functify;
 
 var Functified = (function () {
     function Functified(iterable) {
         _classCallCheck(this, Functified);
 
+        // avoid re-wrapping iterables that have already been Functified
+        if (iterable.isFunctified) {
+            return iterable;
+        }
         this.iterable = iterable;
         this.isFunctified = true;
     }
 
     _createClass(Functified, [{
         key: _Symbol$iterator,
-        value: _regeneratorRuntime.mark(function callee$1$0() {
+        value: _regeneratorRuntime.mark(function value() {
             var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, value;
 
-            return _regeneratorRuntime.wrap(function callee$1$0$(context$2$0) {
+            return _regeneratorRuntime.wrap(function value$(context$2$0) {
                 while (1) switch (context$2$0.prev = context$2$0.next) {
                     case 0:
                         _iteratorNormalCompletion = true;
@@ -101,20 +99,19 @@ var Functified = (function () {
                     case "end":
                         return context$2$0.stop();
                 }
-            }, callee$1$0, this, [[3, 14, 18, 26], [19,, 21, 25]]);
+            }, value, this, [[3, 14, 18, 26], [19,, 21, 25]]);
         })
-    }, {
-        key: "custom",
 
         // fn(iterable) -> generator function
-        value: function custom(fn) {
-            var generator = fn(this.iterable);
-            return Functified.fromGenerator(generator);
-        }
     }, {
-        key: "distinct",
+        key: "custom",
+        value: function custom(fn) {
+            return Functified.fromGenerator(fn(this.iterable));
+        }
 
         // alias dedupe, unique
+    }, {
+        key: "distinct",
         value: function distinct() {
             var iterable = this.iterable;
             var memory = new _Set();
@@ -365,33 +362,27 @@ var Functified = (function () {
                 predicates[_key] = arguments[_key];
             }
 
-            if (predicates.length > 1) {
-                return functify(predicates.map(function (fn) {
-                    return _this.filter(fn);
-                }));
-            }
+            return functify(predicates.map(function (fn) {
+                return _this.filter(fn);
+            }));
         }
     }, {
         key: "groupByMap",
         value: function groupByMap(map) {
             var _this2 = this;
 
-            return functify(functify(map).map(function (_ref) {
+            return functify(map).map(function (_ref) {
                 var _ref2 = _slicedToArray(_ref, 2);
 
                 var name = _ref2[0];
                 var fn = _ref2[1];
                 return [name, _this2.filter(fn)];
-            }));
+            });
         }
     }, {
-        key: "loop",
-
-        // be careful with this one
-        // could combine this with with take
-        // consider using 2 as the default number of loops
-        value: function loop() {
-            var n = arguments[0] === undefined ? Infinity : arguments[0];
+        key: "repeat",
+        value: function repeat() {
+            var n = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 
             var iterable = this.iterable;
             return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
@@ -473,6 +464,16 @@ var Functified = (function () {
                     }
                 }, callee$2$0, this, [[5, 16, 20, 28], [21,, 23, 27]]);
             }));
+        }
+
+        // alias for repeat
+    }, {
+        key: "loop",
+        value: function loop() {
+            var n = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+
+            console.warn("deprecating loop(n), use repeat(n) instead");
+            return this.repeat(n);
         }
     }, {
         key: "map",
@@ -719,7 +720,6 @@ var Functified = (function () {
             // using an explicit iterator supports pausable iteratables
             var iterator = _getIterator(this.iterable);
             var self = this;
-            // TODO: use a Symbol for "startValue"
             return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
                 var i, result;
                 return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
@@ -832,7 +832,7 @@ var Functified = (function () {
     }, {
         key: "enumerate",
         value: function enumerate() {
-            var start = arguments[0] === undefined ? 0 : arguments[0];
+            var start = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 
             var iterable = this.iterable;
             return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
@@ -909,10 +909,10 @@ var Functified = (function () {
         value: function zip() {
             return Functified.zip(this.iterable);
         }
-    }, {
-        key: "every",
 
         // reducing functions
+    }, {
+        key: "every",
         value: function every(callback) {
             var _iteratorNormalCompletion10 = true;
             var _didIteratorError10 = false;
@@ -1002,6 +1002,33 @@ var Functified = (function () {
             return false;
         }
     }, {
+        key: "entries",
+        value: function entries() {
+            if (this.iterable.entries) {
+                return new Functified(this.iterable.entries());
+            } else {
+                throw "doesn't have entries";
+            }
+        }
+    }, {
+        key: "keys",
+        value: function keys() {
+            if (this.iterable.keys) {
+                return new Functified(this.iterable.keys());
+            } else {
+                throw "doesn't have keys";
+            }
+        }
+    }, {
+        key: "values",
+        value: function values() {
+            if (this.iterable.values) {
+                return new Functified(this.iterable.values());
+            } else {
+                throw "doesn't have values";
+            }
+        }
+    }, {
         key: "toArray",
         value: function toArray() {
             var result = [];
@@ -1083,17 +1110,158 @@ var Functified = (function () {
             result += "]";
             return result;
         }
-    }], [{
-        key: "fromGenerator",
 
         // static methods
+    }], [{
+        key: "fromGenerator",
         value: function fromGenerator(generator) {
             return functify(_defineProperty({}, _Symbol$iterator, generator));
         }
     }, {
+        key: "fromObject",
+        value: function fromObject(obj) {
+            var _functify2;
+
+            return functify((_functify2 = {}, _defineProperty(_functify2, _Symbol$iterator, _regeneratorRuntime.mark(function callee$2$0() {
+                var key;
+                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                    while (1) switch (context$3$0.prev = context$3$0.next) {
+                        case 0:
+                            context$3$0.t0 = _regeneratorRuntime.keys(obj);
+
+                        case 1:
+                            if ((context$3$0.t1 = context$3$0.t0()).done) {
+                                context$3$0.next = 8;
+                                break;
+                            }
+
+                            key = context$3$0.t1.value;
+
+                            if (!obj.hasOwnProperty(key)) {
+                                context$3$0.next = 6;
+                                break;
+                            }
+
+                            context$3$0.next = 6;
+                            return [key, obj[key]];
+
+                        case 6:
+                            context$3$0.next = 1;
+                            break;
+
+                        case 8:
+                        case "end":
+                            return context$3$0.stop();
+                    }
+                }, callee$2$0, this);
+            })), _defineProperty(_functify2, "entries", function entries() {
+                return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$3$0() {
+                    var key;
+                    return _regeneratorRuntime.wrap(function callee$3$0$(context$4$0) {
+                        while (1) switch (context$4$0.prev = context$4$0.next) {
+                            case 0:
+                                context$4$0.t0 = _regeneratorRuntime.keys(obj);
+
+                            case 1:
+                                if ((context$4$0.t1 = context$4$0.t0()).done) {
+                                    context$4$0.next = 8;
+                                    break;
+                                }
+
+                                key = context$4$0.t1.value;
+
+                                if (!obj.hasOwnProperty(key)) {
+                                    context$4$0.next = 6;
+                                    break;
+                                }
+
+                                context$4$0.next = 6;
+                                return [key, obj[key]];
+
+                            case 6:
+                                context$4$0.next = 1;
+                                break;
+
+                            case 8:
+                            case "end":
+                                return context$4$0.stop();
+                        }
+                    }, callee$3$0, this);
+                }));
+            }), _defineProperty(_functify2, "keys", function keys() {
+                return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$3$0() {
+                    var key;
+                    return _regeneratorRuntime.wrap(function callee$3$0$(context$4$0) {
+                        while (1) switch (context$4$0.prev = context$4$0.next) {
+                            case 0:
+                                context$4$0.t0 = _regeneratorRuntime.keys(obj);
+
+                            case 1:
+                                if ((context$4$0.t1 = context$4$0.t0()).done) {
+                                    context$4$0.next = 8;
+                                    break;
+                                }
+
+                                key = context$4$0.t1.value;
+
+                                if (!obj.hasOwnProperty(key)) {
+                                    context$4$0.next = 6;
+                                    break;
+                                }
+
+                                context$4$0.next = 6;
+                                return key;
+
+                            case 6:
+                                context$4$0.next = 1;
+                                break;
+
+                            case 8:
+                            case "end":
+                                return context$4$0.stop();
+                        }
+                    }, callee$3$0, this);
+                }));
+            }), _defineProperty(_functify2, "values", function values() {
+                return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$3$0() {
+                    var key;
+                    return _regeneratorRuntime.wrap(function callee$3$0$(context$4$0) {
+                        while (1) switch (context$4$0.prev = context$4$0.next) {
+                            case 0:
+                                context$4$0.t0 = _regeneratorRuntime.keys(obj);
+
+                            case 1:
+                                if ((context$4$0.t1 = context$4$0.t0()).done) {
+                                    context$4$0.next = 8;
+                                    break;
+                                }
+
+                                key = context$4$0.t1.value;
+
+                                if (!obj.hasOwnProperty(key)) {
+                                    context$4$0.next = 6;
+                                    break;
+                                }
+
+                                context$4$0.next = 6;
+                                return obj[key];
+
+                            case 6:
+                                context$4$0.next = 1;
+                                break;
+
+                            case 8:
+                            case "end":
+                                return context$4$0.stop();
+                        }
+                    }, callee$3$0, this);
+                }));
+            }), _functify2));
+        }
+    }, {
         key: "range",
         value: function range(start, stop) {
-            var step = arguments[2] === undefined ? 1 : arguments[2];
+            var step = arguments.length <= 2 || arguments[2] === undefined ? 1 : arguments[2];
 
             if (arguments.length === 1) {
                 stop = start;
@@ -1269,21 +1437,95 @@ var Functified = (function () {
     }, {
         key: "keys",
         value: function keys(obj) {
-            return functify(_Object$keys(obj));
+            console.warn("functify.keys is deprecated and will be removed in 0.3.0");
+            console.warn("use functify(obj).keys() instead");
+            if (!(obj instanceof Object)) {
+                throw "can't get keys for a non-object";
+            }
+            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+                var key;
+                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                    while (1) switch (context$3$0.prev = context$3$0.next) {
+                        case 0:
+                            context$3$0.t0 = _regeneratorRuntime.keys(obj);
+
+                        case 1:
+                            if ((context$3$0.t1 = context$3$0.t0()).done) {
+                                context$3$0.next = 8;
+                                break;
+                            }
+
+                            key = context$3$0.t1.value;
+
+                            if (!obj.hasOwnProperty(key)) {
+                                context$3$0.next = 6;
+                                break;
+                            }
+
+                            context$3$0.next = 6;
+                            return key;
+
+                        case 6:
+                            context$3$0.next = 1;
+                            break;
+
+                        case 8:
+                        case "end":
+                            return context$3$0.stop();
+                    }
+                }, callee$2$0, this);
+            }));
         }
     }, {
         key: "values",
         value: function values(obj) {
-            return functify(_Object$keys(obj).map(function (key) {
+            console.log("functify.values is deprecated and will be removed in 0.3.0");
+            console.warn("use functify(obj).values() instead");
+            return Functified.keys(obj).map(function (key) {
                 return obj[key];
-            }));
+            });
         }
     }, {
         key: "entries",
         value: function entries(obj) {
-            return functify(_Object$keys(obj)).map(function (key) {
-                return [key, obj[key]];
-            });
+            console.log("functify.entries is deprecated and will be removed in 0.3.0");
+            console.warn("use functify(obj).entries() instead");
+            if (!(obj instanceof Object)) {
+                throw "can't get keys for a non-object";
+            }
+            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+                var key;
+                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                    while (1) switch (context$3$0.prev = context$3$0.next) {
+                        case 0:
+                            context$3$0.t0 = _regeneratorRuntime.keys(obj);
+
+                        case 1:
+                            if ((context$3$0.t1 = context$3$0.t0()).done) {
+                                context$3$0.next = 8;
+                                break;
+                            }
+
+                            key = context$3$0.t1.value;
+
+                            if (!obj.hasOwnProperty(key)) {
+                                context$3$0.next = 6;
+                                break;
+                            }
+
+                            context$3$0.next = 6;
+                            return [key, obj[key]];
+
+                        case 6:
+                            context$3$0.next = 1;
+                            break;
+
+                        case 8:
+                        case "end":
+                            return context$3$0.stop();
+                    }
+                }, callee$2$0, this);
+            }));
         }
     }]);
 
@@ -1291,14 +1533,12 @@ var Functified = (function () {
 })();
 
 function functify(iterable) {
-    if (iterable.constructor === Object && !iterable[_Symbol$iterator]) {
-        return Functified.entries(iterable);
+    if (!iterable[_Symbol$iterator]) {
+        return Functified.fromObject(iterable);
     } else {
         return new Functified(iterable);
     }
 }
-
-;
 
 functify.fromGenerator = Functified.fromGenerator;
 functify.range = Functified.range;
@@ -1306,5 +1546,7 @@ functify.zip = Functified.zip;
 functify.keys = Functified.keys;
 functify.values = Functified.values;
 functify.entries = Functified.entries;
+
+exports["default"] = functify;
 module.exports = exports["default"];
 // finished

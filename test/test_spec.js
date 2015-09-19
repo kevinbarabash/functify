@@ -1,7 +1,5 @@
-if (require) {
-    var assert = require("assert");
-    var functify = require("../src/functify");
-}
+var assert = require("assert");
+var functify = require("../src/functify.js");
 
 describe("functify", () => {
     var numbers, result;
