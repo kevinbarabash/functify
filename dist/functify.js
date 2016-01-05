@@ -1,26 +1,16 @@
 "use strict";
 
-var _createClass = require("babel-runtime/helpers/create-class")["default"];
-
-var _classCallCheck = require("babel-runtime/helpers/class-call-check")["default"];
-
-var _defineProperty = require("babel-runtime/helpers/define-property")["default"];
-
-var _slicedToArray = require("babel-runtime/helpers/sliced-to-array")["default"];
-
-var _Object$defineProperty = require("babel-runtime/core-js/object/define-property")["default"];
-
-var _Symbol$iterator = require("babel-runtime/core-js/symbol/iterator")["default"];
-
-var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
-
-var _getIterator = require("babel-runtime/core-js/get-iterator")["default"];
-
-var _Set = require("babel-runtime/core-js/set")["default"];
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }
+
+function _defineProperty(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Functified = (function () {
     function Functified(iterable) {
@@ -35,18 +25,18 @@ var Functified = (function () {
     }
 
     _createClass(Functified, [{
-        key: _Symbol$iterator,
-        value: _regeneratorRuntime.mark(function callee$1$0() {
+        key: Symbol.iterator,
+        value: regeneratorRuntime.mark(function callee$1$0() {
             var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, value;
 
-            return _regeneratorRuntime.wrap(function callee$1$0$(context$2$0) {
+            return regeneratorRuntime.wrap(function callee$1$0$(context$2$0) {
                 while (1) switch (context$2$0.prev = context$2$0.next) {
                     case 0:
                         _iteratorNormalCompletion = true;
                         _didIteratorError = false;
                         _iteratorError = undefined;
                         context$2$0.prev = 3;
-                        _iterator = _getIterator(this.iterable);
+                        _iterator = this.iterable[Symbol.iterator]();
 
                     case 5:
                         if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
@@ -116,18 +106,18 @@ var Functified = (function () {
         // alias dedupe, unique
         value: function distinct() {
             var iterable = this.iterable;
-            var memory = new _Set();
-            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+            var memory = new Set();
+            return Functified.fromGenerator(regeneratorRuntime.mark(function callee$2$0() {
                 var _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, value;
 
-                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
                         case 0:
                             _iteratorNormalCompletion2 = true;
                             _didIteratorError2 = false;
                             _iteratorError2 = undefined;
                             context$3$0.prev = 3;
-                            _iterator2 = _getIterator(iterable);
+                            _iterator2 = iterable[Symbol.iterator]();
 
                         case 5:
                             if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
@@ -196,17 +186,17 @@ var Functified = (function () {
         key: "filter",
         value: function filter(callback) {
             var iterable = this.iterable;
-            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+            return Functified.fromGenerator(regeneratorRuntime.mark(function callee$2$0() {
                 var _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, value;
 
-                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
                         case 0:
                             _iteratorNormalCompletion3 = true;
                             _didIteratorError3 = false;
                             _iteratorError3 = undefined;
                             context$3$0.prev = 3;
-                            _iterator3 = _getIterator(iterable);
+                            _iterator3 = iterable[Symbol.iterator]();
 
                         case 5:
                             if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
@@ -274,17 +264,17 @@ var Functified = (function () {
         key: "flatten",
         value: function flatten() {
             var iterable = this.iterable;
-            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+            return Functified.fromGenerator(regeneratorRuntime.mark(function callee$2$0() {
                 var _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, value;
 
-                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
                         case 0:
                             _iteratorNormalCompletion4 = true;
                             _didIteratorError4 = false;
                             _iteratorError4 = undefined;
                             context$3$0.prev = 3;
-                            _iterator4 = _getIterator(iterable);
+                            _iterator4 = iterable[Symbol.iterator]();
 
                         case 5:
                             if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
@@ -294,7 +284,7 @@ var Functified = (function () {
 
                             value = _step4.value;
 
-                            if (!value[_Symbol$iterator]) {
+                            if (!value[Symbol.iterator]) {
                                 context$3$0.next = 11;
                                 break;
                             }
@@ -387,10 +377,10 @@ var Functified = (function () {
             var n = arguments[0] === undefined ? 1 : arguments[0];
 
             var iterable = this.iterable;
-            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+            return Functified.fromGenerator(regeneratorRuntime.mark(function callee$2$0() {
                 var i, _iteratorNormalCompletion5, _didIteratorError5, _iteratorError5, _iterator5, _step5, value;
 
-                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
                         case 0:
                             i = 0;
@@ -405,7 +395,7 @@ var Functified = (function () {
                             _didIteratorError5 = false;
                             _iteratorError5 = undefined;
                             context$3$0.prev = 5;
-                            _iterator5 = _getIterator(iterable);
+                            _iterator5 = iterable[Symbol.iterator]();
 
                         case 7:
                             if (_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done) {
@@ -481,17 +471,17 @@ var Functified = (function () {
         key: "map",
         value: function map(callback) {
             var iterable = this.iterable;
-            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+            return Functified.fromGenerator(regeneratorRuntime.mark(function callee$2$0() {
                 var _iteratorNormalCompletion6, _didIteratorError6, _iteratorError6, _iterator6, _step6, value;
 
-                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
                         case 0:
                             _iteratorNormalCompletion6 = true;
                             _didIteratorError6 = false;
                             _iteratorError6 = undefined;
                             context$3$0.prev = 3;
-                            _iterator6 = _getIterator(iterable);
+                            _iterator6 = iterable[Symbol.iterator]();
 
                         case 5:
                             if (_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done) {
@@ -553,10 +543,10 @@ var Functified = (function () {
         key: "skip",
         value: function skip(n) {
             var iterable = this.iterable;
-            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+            return Functified.fromGenerator(regeneratorRuntime.mark(function callee$2$0() {
                 var i, _iteratorNormalCompletion7, _didIteratorError7, _iteratorError7, _iterator7, _step7, value;
 
-                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
                         case 0:
                             i = 0;
@@ -564,7 +554,7 @@ var Functified = (function () {
                             _didIteratorError7 = false;
                             _iteratorError7 = undefined;
                             context$3$0.prev = 4;
-                            _iterator7 = _getIterator(iterable);
+                            _iterator7 = iterable[Symbol.iterator]();
 
                         case 6:
                             if (_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done) {
@@ -637,10 +627,10 @@ var Functified = (function () {
         key: "skipWhile",
         value: function skipWhile(predicate) {
             var iterable = this.iterable;
-            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+            return Functified.fromGenerator(regeneratorRuntime.mark(function callee$2$0() {
                 var skip, _iteratorNormalCompletion8, _didIteratorError8, _iteratorError8, _iterator8, _step8, value;
 
-                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
                         case 0:
                             skip = true;
@@ -648,7 +638,7 @@ var Functified = (function () {
                             _didIteratorError8 = false;
                             _iteratorError8 = undefined;
                             context$3$0.prev = 4;
-                            _iterator8 = _getIterator(iterable);
+                            _iterator8 = iterable[Symbol.iterator]();
 
                         case 6:
                             if (_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done) {
@@ -720,11 +710,11 @@ var Functified = (function () {
         key: "take",
         value: function take(n) {
             // using an explicit iterator supports pausable iteratables
-            var iterator = _getIterator(this.iterable);
+            var iterator = this.iterable[Symbol.iterator]();
             var self = this;
-            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+            return Functified.fromGenerator(regeneratorRuntime.mark(function callee$2$0() {
                 var i, result;
-                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
                         case 0:
                             i = 0;
@@ -776,11 +766,11 @@ var Functified = (function () {
     }, {
         key: "takeUntil",
         value: function takeUntil(predicate) {
-            var iterator = _getIterator(this.iterable);
+            var iterator = this.iterable[Symbol.iterator]();
             var self = this;
-            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+            return Functified.fromGenerator(regeneratorRuntime.mark(function callee$2$0() {
                 var result;
-                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
                         case 0:
                             if (!(self.hasOwnProperty("startValue") && self.isPausable)) {
@@ -837,10 +827,10 @@ var Functified = (function () {
             var start = arguments[0] === undefined ? 0 : arguments[0];
 
             var iterable = this.iterable;
-            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+            return Functified.fromGenerator(regeneratorRuntime.mark(function callee$2$0() {
                 var i, _iteratorNormalCompletion9, _didIteratorError9, _iteratorError9, _iterator9, _step9, value;
 
-                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
                         case 0:
                             i = start;
@@ -848,7 +838,7 @@ var Functified = (function () {
                             _didIteratorError9 = false;
                             _iteratorError9 = undefined;
                             context$3$0.prev = 4;
-                            _iterator9 = _getIterator(iterable);
+                            _iterator9 = iterable[Symbol.iterator]();
 
                         case 6:
                             if (_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done) {
@@ -921,7 +911,7 @@ var Functified = (function () {
             var _iteratorError10 = undefined;
 
             try {
-                for (var _iterator10 = _getIterator(this.iterable), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+                for (var _iterator10 = this.iterable[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
                     var value = _step10.value;
 
                     if (!callback(value)) {
@@ -949,7 +939,7 @@ var Functified = (function () {
         key: "reduce",
         value: function reduce(callback, initialValue) {
             var accum = initialValue;
-            var iterator = _getIterator(this.iterable);
+            var iterator = this.iterable[Symbol.iterator]();
 
             if (accum === undefined) {
                 var result = iterator.next();
@@ -979,7 +969,7 @@ var Functified = (function () {
             var _iteratorError11 = undefined;
 
             try {
-                for (var _iterator11 = _getIterator(this.iterable), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+                for (var _iterator11 = this.iterable[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
                     var value = _step11.value;
 
                     if (callback(value)) {
@@ -1039,7 +1029,7 @@ var Functified = (function () {
             var _iteratorError12 = undefined;
 
             try {
-                for (var _iterator12 = _getIterator(this.iterable), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
+                for (var _iterator12 = this.iterable[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
                     var value = _step12.value;
 
                     result.push(value);
@@ -1064,10 +1054,10 @@ var Functified = (function () {
     }, {
         key: "toPausable",
         value: function toPausable() {
-            var iterator = _getIterator(this.iterable);
-            var functified = Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+            var iterator = this.iterable[Symbol.iterator]();
+            var functified = Functified.fromGenerator(regeneratorRuntime.mark(function callee$2$0() {
                 var result;
-                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
                         case 0:
                             if (!true) {
@@ -1117,19 +1107,19 @@ var Functified = (function () {
 
         // static methods
         value: function fromGenerator(generator) {
-            return functify(_defineProperty({}, _Symbol$iterator, generator));
+            return functify(_defineProperty({}, Symbol.iterator, generator));
         }
     }, {
         key: "fromObject",
         value: function fromObject(obj) {
             var _functify2;
 
-            return functify((_functify2 = {}, _defineProperty(_functify2, _Symbol$iterator, _regeneratorRuntime.mark(function callee$2$0() {
+            return functify((_functify2 = {}, _defineProperty(_functify2, Symbol.iterator, regeneratorRuntime.mark(function callee$2$0() {
                 var key;
-                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
                         case 0:
-                            context$3$0.t0 = _regeneratorRuntime.keys(obj);
+                            context$3$0.t0 = regeneratorRuntime.keys(obj);
 
                         case 1:
                             if ((context$3$0.t1 = context$3$0.t0()).done) {
@@ -1157,12 +1147,12 @@ var Functified = (function () {
                     }
                 }, callee$2$0, this);
             })), _defineProperty(_functify2, "entries", function entries() {
-                return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$3$0() {
+                return Functified.fromGenerator(regeneratorRuntime.mark(function callee$3$0() {
                     var key;
-                    return _regeneratorRuntime.wrap(function callee$3$0$(context$4$0) {
+                    return regeneratorRuntime.wrap(function callee$3$0$(context$4$0) {
                         while (1) switch (context$4$0.prev = context$4$0.next) {
                             case 0:
-                                context$4$0.t0 = _regeneratorRuntime.keys(obj);
+                                context$4$0.t0 = regeneratorRuntime.keys(obj);
 
                             case 1:
                                 if ((context$4$0.t1 = context$4$0.t0()).done) {
@@ -1191,12 +1181,12 @@ var Functified = (function () {
                     }, callee$3$0, this);
                 }));
             }), _defineProperty(_functify2, "keys", function keys() {
-                return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$3$0() {
+                return Functified.fromGenerator(regeneratorRuntime.mark(function callee$3$0() {
                     var key;
-                    return _regeneratorRuntime.wrap(function callee$3$0$(context$4$0) {
+                    return regeneratorRuntime.wrap(function callee$3$0$(context$4$0) {
                         while (1) switch (context$4$0.prev = context$4$0.next) {
                             case 0:
-                                context$4$0.t0 = _regeneratorRuntime.keys(obj);
+                                context$4$0.t0 = regeneratorRuntime.keys(obj);
 
                             case 1:
                                 if ((context$4$0.t1 = context$4$0.t0()).done) {
@@ -1225,12 +1215,12 @@ var Functified = (function () {
                     }, callee$3$0, this);
                 }));
             }), _defineProperty(_functify2, "values", function values() {
-                return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$3$0() {
+                return Functified.fromGenerator(regeneratorRuntime.mark(function callee$3$0() {
                     var key;
-                    return _regeneratorRuntime.wrap(function callee$3$0$(context$4$0) {
+                    return regeneratorRuntime.wrap(function callee$3$0$(context$4$0) {
                         while (1) switch (context$4$0.prev = context$4$0.next) {
                             case 0:
-                                context$4$0.t0 = _regeneratorRuntime.keys(obj);
+                                context$4$0.t0 = regeneratorRuntime.keys(obj);
 
                             case 1:
                                 if ((context$4$0.t1 = context$4$0.t0()).done) {
@@ -1269,9 +1259,9 @@ var Functified = (function () {
                 stop = start;
                 start = 0;
             }
-            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+            return Functified.fromGenerator(regeneratorRuntime.mark(function callee$2$0() {
                 var i;
-                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
                         case 0:
                             i = start;
@@ -1335,16 +1325,24 @@ var Functified = (function () {
         }
     }, {
         key: "zip",
-        value: function zip(iterables) {
-            return Functified.fromGenerator(_regeneratorRuntime.mark(function callee$2$0() {
+        value: function zip() {
+            for (var _len2 = arguments.length, iterables = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                iterables[_key2] = arguments[_key2];
+            }
+
+            // assume if a single value is passed in it must contain an array
+            if (iterables.length === 1) {
+                iterables = iterables[0];
+            }
+            return Functified.fromGenerator(regeneratorRuntime.mark(function callee$2$0() {
                 var iterators, vector, _iteratorNormalCompletion13, _didIteratorError13, _iteratorError13, _iterator13, _step13, iterator, result;
 
-                return _regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
+                return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
                         case 0:
                             iterators = iterables.map(function (iterable) {
-                                if (iterable[_Symbol$iterator]) {
-                                    return _getIterator(iterable);
+                                if (iterable[Symbol.iterator]) {
+                                    return iterable[Symbol.iterator]();
                                 } else {
                                     throw "can't zip a non-iterable";
                                 }
@@ -1361,7 +1359,7 @@ var Functified = (function () {
                             _didIteratorError13 = false;
                             _iteratorError13 = undefined;
                             context$3$0.prev = 6;
-                            _iterator13 = _getIterator(iterators);
+                            _iterator13 = iterators[Symbol.iterator]();
 
                         case 8:
                             if (_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done) {
@@ -1442,7 +1440,7 @@ var Functified = (function () {
 })();
 
 function functify(iterable) {
-    if (!iterable[_Symbol$iterator]) {
+    if (!iterable[Symbol.iterator]) {
         return Functified.fromObject(iterable);
     } else {
         return new Functified(iterable);
