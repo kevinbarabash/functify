@@ -403,8 +403,5 @@ function functify(iterable) {
 functify.fromGenerator = Functified.fromGenerator;
 functify.range = Functified.range;
 functify.zip = Functified.zip;
-functify.keys = Functified.keys;
-functify.values = Functified.values;
-functify.entries = Functified.entries;
 
 export default functify;
