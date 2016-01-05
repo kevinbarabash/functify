@@ -260,6 +260,16 @@ class Functified {
         return result;
     }
 
+    toObject() {
+        var result = {};
+        for (let value of this.iterable) {
+            if (Array.isArray(value)) {
+                result[value[0]] = value[1];
+            }
+        }
+        return result;
+    }
+
     toPausable() {
         var iterator = this.iterable[Symbol.iterator]();
         var functified = Functified.fromGenerator(function* () {

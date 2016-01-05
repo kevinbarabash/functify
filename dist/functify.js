@@ -1052,6 +1052,39 @@ var Functified = (function () {
             return result;
         }
     }, {
+        key: "toObject",
+        value: function toObject() {
+            var result = {};
+            var _iteratorNormalCompletion13 = true;
+            var _didIteratorError13 = false;
+            var _iteratorError13 = undefined;
+
+            try {
+                for (var _iterator13 = this.iterable[Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
+                    var value = _step13.value;
+
+                    if (Array.isArray(value)) {
+                        result[value[0]] = value[1];
+                    }
+                }
+            } catch (err) {
+                _didIteratorError13 = true;
+                _iteratorError13 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion13 && _iterator13["return"]) {
+                        _iterator13["return"]();
+                    }
+                } finally {
+                    if (_didIteratorError13) {
+                        throw _iteratorError13;
+                    }
+                }
+            }
+
+            return result;
+        }
+    }, {
         key: "toPausable",
         value: function toPausable() {
             var iterator = this.iterable[Symbol.iterator]();
@@ -1335,7 +1368,7 @@ var Functified = (function () {
                 iterables = iterables[0];
             }
             return Functified.fromGenerator(regeneratorRuntime.mark(function callee$2$0() {
-                var iterators, vector, _iteratorNormalCompletion13, _didIteratorError13, _iteratorError13, _iterator13, _step13, iterator, result;
+                var iterators, vector, _iteratorNormalCompletion14, _didIteratorError14, _iteratorError14, _iterator14, _step14, iterator, result;
 
                 return regeneratorRuntime.wrap(function callee$2$0$(context$3$0) {
                     while (1) switch (context$3$0.prev = context$3$0.next) {
@@ -1355,19 +1388,19 @@ var Functified = (function () {
                             }
 
                             vector = [];
-                            _iteratorNormalCompletion13 = true;
-                            _didIteratorError13 = false;
-                            _iteratorError13 = undefined;
+                            _iteratorNormalCompletion14 = true;
+                            _didIteratorError14 = false;
+                            _iteratorError14 = undefined;
                             context$3$0.prev = 6;
-                            _iterator13 = iterators[Symbol.iterator]();
+                            _iterator14 = iterators[Symbol.iterator]();
 
                         case 8:
-                            if (_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done) {
+                            if (_iteratorNormalCompletion14 = (_step14 = _iterator14.next()).done) {
                                 context$3$0.next = 19;
                                 break;
                             }
 
-                            iterator = _step13.value;
+                            iterator = _step14.value;
                             result = iterator.next();
 
                             if (!result.done) {
@@ -1381,7 +1414,7 @@ var Functified = (function () {
                             vector.push(result.value);
 
                         case 16:
-                            _iteratorNormalCompletion13 = true;
+                            _iteratorNormalCompletion14 = true;
                             context$3$0.next = 8;
                             break;
 
@@ -1392,26 +1425,26 @@ var Functified = (function () {
                         case 21:
                             context$3$0.prev = 21;
                             context$3$0.t0 = context$3$0["catch"](6);
-                            _didIteratorError13 = true;
-                            _iteratorError13 = context$3$0.t0;
+                            _didIteratorError14 = true;
+                            _iteratorError14 = context$3$0.t0;
 
                         case 25:
                             context$3$0.prev = 25;
                             context$3$0.prev = 26;
 
-                            if (!_iteratorNormalCompletion13 && _iterator13["return"]) {
-                                _iterator13["return"]();
+                            if (!_iteratorNormalCompletion14 && _iterator14["return"]) {
+                                _iterator14["return"]();
                             }
 
                         case 28:
                             context$3$0.prev = 28;
 
-                            if (!_didIteratorError13) {
+                            if (!_didIteratorError14) {
                                 context$3$0.next = 31;
                                 break;
                             }
 
-                            throw _iteratorError13;
+                            throw _iteratorError14;
 
                         case 31:
                             return context$3$0.finish(28);

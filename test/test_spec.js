@@ -202,6 +202,13 @@ describe("functify", () => {
             }
             assert.deepEqual(result, [1,2]);
         });
+
+        it("should return an object", () => {
+            const obj = { x: 5, y: 10 };
+            const result = functify(obj).entries().toObject();
+
+            assert.deepEqual(result, { x: 5, y: 10 });
+        });
     });
 
     describe("enumerate", () => {
@@ -488,10 +495,7 @@ describe("functify", () => {
             for (let [x, y] of functify.zip([[1,2],[5,10]])) {
                 result.push([x, y]);
             }
-            assert.equal(result[0][0], 1);
-            assert.equal(result[0][1], 5);
-            assert.equal(result[1][0], 2);
-            assert.equal(result[1][1], 10);
+            assert.deepEqual(result, [[1, 5], [2, 10]]);
         });
 
         it("zip should work with multiple arguments", () => {
@@ -499,10 +503,7 @@ describe("functify", () => {
             for (let [x, y] of functify.zip([1,2],[5,10])) {
                 result.push([x, y]);
             }
-            assert.equal(result[0][0], 1);
-            assert.equal(result[0][1], 5);
-            assert.equal(result[1][0], 2);
-            assert.equal(result[1][1], 10);
+            assert.deepEqual(result, [[1, 5], [2, 10]]);
         });
     });
 });
