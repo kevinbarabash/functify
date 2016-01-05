@@ -481,4 +481,28 @@ describe("functify", () => {
             assert.deepEqual(result, [25, 100]);
         });
     });
+
+    describe("static methods", () => {
+        it("zip should work with an array", () => {
+            let result = [];
+            for (let [x, y] of functify.zip([[1,2],[5,10]])) {
+                result.push([x, y]);
+            }
+            assert.equal(result[0][0], 1);
+            assert.equal(result[0][1], 5);
+            assert.equal(result[1][0], 2);
+            assert.equal(result[1][1], 10);
+        });
+
+        it("zip should work with multiple arguments", () => {
+            let result = [];
+            for (let [x, y] of functify.zip([1,2],[5,10])) {
+                result.push([x, y]);
+            }
+            assert.equal(result[0][0], 1);
+            assert.equal(result[0][1], 5);
+            assert.equal(result[1][0], 2);
+            assert.equal(result[1][1], 10);
+        });
+    });
 });

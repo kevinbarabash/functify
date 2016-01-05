@@ -353,7 +353,11 @@ class Functified {
         });
     };
 
-    static zip(iterables) {
+    static zip(...iterables) {
+        // assume if a single value is passed in it must contain an array
+        if (iterables.length === 1) {
+            iterables = iterables[0];
+        }
         return Functified.fromGenerator(function* () {
             var iterators = iterables.map(iterable => {
                 if (iterable[Symbol.iterator]) {
