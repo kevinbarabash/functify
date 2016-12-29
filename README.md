@@ -61,7 +61,7 @@ A Map instance itself can be used as an iterator, e.g.
 `functify` wraps Map instances and exposes versions of `keys()`, `values()`, 
 and `entries()` that methods like `map()` and `filter()` can be chained to, e.g.
 
-    for (let v2 of functify(map).entries().map(pair => pair[1] * pair[1]) {
+    for (let v2 of functify(map).entries().map(pair => pair[1] * pair[1])) {
         console.log(v2);  // 25, 100
     }
     
